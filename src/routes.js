@@ -29,10 +29,10 @@ export const adminRoutes = [
 ]
 
 export const publicRoutes = [
-    // {
-    //     path: MAIN_ROUTE,
-    //     Component: ReviewsStore
-    // },
+    {
+        path: MAIN_ROUTE,
+        Component: ReviewsStore
+    },
     {
         path: LOGIN_ROUTE,
         Component: Auth

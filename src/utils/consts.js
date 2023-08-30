@@ -7,6 +7,8 @@ export const REVIEW_ROUTE = "/review";
 export const REVIEW_ROUTE_EDIT = "/review_edit"
 export const USER_PROFILE_ROUTE = "/user";
 
+export const TYPES_EN = ["ANIME", "GAMES", "BOOKS", "MOVIES", "SERIALS", "CARTOONS", "OTHERS"]
+
 export const lightThemeColors = {
     background: "#eeeeee",
     text: "black",

@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {Button, Card, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
 
-const Auth = () => {
+const ReviewsStore = () => {
     const {user} = useContext(Context);
     const themeColors = user.themeColors;
 
@@ -14,4 +14,4 @@ const Auth = () => {
     )
 };
 
-export default Auth;
+export default ReviewsStore;
