@@ -4,6 +4,7 @@ import {adminRoutes, authRoutes, publicRoutes} from "../routes.js";
 import {MAIN_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
+import Alert404 from "./404";
 
 const AppRouter = observer(() => {
     const {user} = useContext(Context);
@@ -19,8 +20,9 @@ const AppRouter = observer(() => {
                 <Route key={path} path={path} element={Component()} exact/>
             )}
             <Route
+                key="*"
                 path="*"
-                element={<Navigate to={MAIN_ROUTE} replace />}
+                element={<Alert404/>}
             />
         </Routes>
     );

@@ -7,6 +7,7 @@ import {observer} from "mobx-react-lite";
 import {FiMoon, FiSun} from "react-icons/fi";
 import {BiSearchAlt, BiUserCircle} from "react-icons/bi";
 import LogoSVG from "../utils/logo.svg";
+import Types from "./Types";
 
 const NavBar = observer(() => {
     const {user} = useContext(Context);
@@ -38,9 +39,13 @@ const NavBar = observer(() => {
                         to={MAIN_ROUTE}
                     >
                         <img
-                            style={{color: themeColors.text, backgroundColor: themeColors.background}}
-                            width="300"
-                            height="100"
+                            style={{
+                                color: themeColors.text,
+                                backgroundColor: themeColors.background,
+                                width: "15em",
+                                height: "5em"
+
+                        }}
                             alt="logo"
                             src={LogoSVG}
                         />
@@ -116,15 +121,7 @@ const NavBar = observer(() => {
                     />
                 </Container>
             </Navbar>
-            <Navbar
-                style={{gap: "2em", justifyContent: "space-between"}}
-            >
-                {TYPES_EN.map((type) => {
-                    return (
-                        <NavLink style={{color: themeColors.text}} to={MAIN_ROUTE}>{type}</NavLink>
-                    )
-                })}
-            </Navbar>
+            <Types/>
         </Container>
     )
 });
