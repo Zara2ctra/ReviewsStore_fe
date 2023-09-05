@@ -1,24 +1,32 @@
 import React, {useContext} from 'react';
 import {Context} from "../index";
-import {NavLink} from "react-router-dom";
 import {observer} from "mobx-react-lite";
-import {MAIN_ROUTE, TYPES_EN} from "../utils/consts";
-import {Navbar} from "react-bootstrap";
+import {TYPES_EN} from "../utils/consts";
+import {Button, ListGroup} from "react-bootstrap";
 
-const Types = observer(() => {
-    const {user} = useContext(Context);
-    const themeColors = user.themeColors;
+const Types = observer(({themeMode}) => {
+    const {review} = useContext(Context)
+    function clickType(type) {
+        review.setSelectedType(type)
+
+    }
 
     return (
-        <Navbar
-            style={{gap: "2em", justifyContent: "space-between"}}
+        <ListGroup
+            style={{gap: "2em", flexDirection: "row", justifyContent: "space-between"}}
         >
             {TYPES_EN.map((type) => {
                 return (
-                    <NavLink style={{color: themeColors.text}} to={MAIN_ROUTE}>{type}</NavLink>
+                    <Button
+                        variant={themeMode}
+                        active={type === review.selectedType}
+                        onClick={() => clickType(type)}
+                    >
+                        {type}
+                    </Button>
                 )
             })}
-        </Navbar>
+        </ListGroup>
     );
 })
 

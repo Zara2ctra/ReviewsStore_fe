@@ -1,15 +1,14 @@
-import React, {useContext, useState} from 'react';
-import {Button, Card, Container, Form, Row} from "react-bootstrap";
-import {Context} from "../index";
+import React from 'react';
+import {Container} from "react-bootstrap";
+import PopularReviews from "../components/PopularReviews";
+import RecentReviews from "../components/RecentReviews";
 
 const ReviewsStore = () => {
-    const {user} = useContext(Context);
-    const themeColors = user.themeColors;
-
 
     return (
         <Container>
-
+            <PopularReviews/>
+            <RecentReviews/>
         </Container>
     )
 };

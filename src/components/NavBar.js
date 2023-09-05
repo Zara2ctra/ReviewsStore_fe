@@ -12,6 +12,7 @@ import Types from "./Types";
 const NavBar = observer(() => {
     const {user} = useContext(Context);
     const isDarkMode = user.themeMode === "dark";
+    const themeMode = user.themeMode
     const themeColors = user.themeColors;
     const navigate = useNavigate();
 
@@ -52,14 +53,14 @@ const NavBar = observer(() => {
                     </NavLink>
                     <Form className="d-flex">
                         <Form.Control
-                            data-bs-theme={user.themeMode}
+                            data-bs-theme={themeMode}
                             type="search"
                             placeholder="Search"
                             className="me-2"
                             aria-label="Search"
                         />
                         <Button
-                            variant={user.themeMode}
+                            variant={themeMode}
                         >
                             <BiSearchAlt/>
                         </Button>
@@ -67,7 +68,7 @@ const NavBar = observer(() => {
                     {user.isAuth ?
                         <Nav className="ml-auto">
                             <NavDropdown
-                                data-bs-theme={user.themeMode}
+                                data-bs-theme={themeMode}
                                 style={{color: themeColors.text}}
                                 title={
                                     <BiUserCircle
@@ -88,14 +89,14 @@ const NavBar = observer(() => {
                         :
                         <Nav className="ml-auto" style={{color: 'white'}}>
                             <Button
-                                variant={user.themeMode}
+                                variant={themeMode}
                                 className={"m-lg-1"}
                                 onClick={handleClickAuthorization}
                             >
                                 Authorization
                             </Button>
                             <Button
-                                variant={user.themeMode}
+                                variant={themeMode}
                                 className={"m-lg-1"}
                                 onClick={handleClickRegistration}
                             >
@@ -121,7 +122,9 @@ const NavBar = observer(() => {
                     />
                 </Container>
             </Navbar>
-            <Types/>
+            <>
+            <Types themeMode={themeMode} />
+            </>
         </Container>
     )
 });
