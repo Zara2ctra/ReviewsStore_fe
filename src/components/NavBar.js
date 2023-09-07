@@ -122,9 +122,9 @@ const NavBar = observer(() => {
                     />
                 </Container>
             </Navbar>
-            <>
+        <Container>
             <Types themeMode={themeMode} />
-            </>
+        </Container>
         </Container>
     )
 });

@@ -9,6 +9,8 @@ import ReviewsStore from "./pages/ReviewsStore";
 import Auth from "./pages/Auth";
 import ReviewPage from "./pages/ReviewPage";
 import UserPage from "./pages/UserPage";
+import ReviewsTypeStore from "./pages/ReviewsTypeStore";
+import Alert404 from "./components/404";
 
 export const authRoutes = [
     // {
@@ -41,12 +43,12 @@ export const publicRoutes = [
         path: REGISTRATION_ROUTE,
         Component: Auth
     },
-    // {
-    //     path: REVIEW_ROUTE + '/:id',
-    //     Component: ReviewPage
-    // },
-    // {
-    //     path: REVIEWS_STORE_ROUTE + '/:type',
-    //     Component: ReviewsStore
-    // }
+    {
+        path: REVIEW_ROUTE + '/:id',
+        Component: ReviewPage
+    },
+    {
+        path: REVIEWS_STORE_ROUTE + '/:type',
+        Component: ReviewsTypeStore
+    },
 ]

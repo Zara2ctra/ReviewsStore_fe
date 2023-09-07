@@ -1,17 +1,32 @@
-import React, {useContext, useState} from 'react';
-import {Container, Row} from "react-bootstrap";
+import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
+import {useParams} from "react-router-dom";
+import {Container, Row} from "react-bootstrap";
 import ReviewItem from "../components/ReviewItem";
 import ShowMoreButton from "../components/ShowMoreButton";
 import {observer} from "mobx-react-lite";
 
-const ReviewsStore = observer(() => {
+const ReviewsTypeStore = observer(() => {
     const {user} = useContext(Context);
-    const {review} = useContext(Context)
+    const {type} = useParams();
+    const {review} = useContext(Context);
+    const typeReviews = getTypeReviews(review.reviews, type);
+
     let themeColor = user.themeColors;
     let themeMode = user.themeMode;
-    const [popularReview, setPopularReview] = useState(() => getPopularReviews(review.reviews, 2));
-    const [recentReview, setRecentReview] = useState(() => getRecentReviews(review.reviews, 2));
+
+    const [popularTypeReview, setPopularReview] = useState(() => getPopularReviews(typeReviews, 2));
+    const [recentTypeReview, setRecentReview] = useState(() => getRecentReviews(typeReviews, 2));
+
+    useEffect(() => {
+        const typeReviews = getTypeReviews(review.reviews, type);
+        setPopularReview(() => getPopularReviews(typeReviews, 2));
+        setRecentReview(() => getRecentReviews(typeReviews, 2));
+    }, [type]);
+
+    function getTypeReviews(reviews, type) {
+        return reviews.filter((review) => review.artWorkType === type)
+    }
 
     function getPopularReviews(review, n) {
         return review.slice().sort((a, b) => {
@@ -20,7 +35,7 @@ const ReviewsStore = observer(() => {
     }
 
     const showMorePopularReviews = () => {
-        setPopularReview(() => getPopularReviews(review.reviews).slice(0, 6))
+        setPopularReview(() => getPopularReviews(typeReviews, 6))
     }
 
     function getRecentReviews(review, n) {
@@ -30,7 +45,7 @@ const ReviewsStore = observer(() => {
     }
 
     const showMoreRecentReviews = () => {
-        setRecentReview(() => getRecentReviews(review.reviews).slice(0, 6))
+        setRecentReview(() => getRecentReviews(typeReviews, 6))
     }
 
 
@@ -46,7 +61,7 @@ const ReviewsStore = observer(() => {
                 <Row
                     xs={1} md={1} className="g-4"
                 >
-                    {popularReview.map((review) => (
+                    {popularTypeReview.map((review) => (
                         <ReviewItem
                             key={review.id}
                             review={review}
@@ -54,7 +69,7 @@ const ReviewsStore = observer(() => {
                         />
                     ))}
                 </Row>
-                <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularReview}/>
+                <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularTypeReview}/>
             </Container>
             <Container
                 className={"mt-5"}
@@ -66,14 +81,14 @@ const ReviewsStore = observer(() => {
                 <Row
                     xs={1} md={1} className="g-4"
                 >
-                    {recentReview.map((review) => (
+                    {recentTypeReview.map((review) => (
                         <ReviewItem key={review.id} review={review} themeMode={themeMode}/>
                     ))}
                 </Row>
-                <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentReview}/>
+                <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentTypeReview}/>
             </Container>
         </Container>
     );
-});
+})
 
-export default ReviewsStore;
+export default ReviewsTypeStore;

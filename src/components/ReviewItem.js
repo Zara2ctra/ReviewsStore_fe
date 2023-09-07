@@ -1,12 +1,21 @@
 import React from 'react';
 import {Card, Col, Image} from "react-bootstrap";
 import Stars from "./Stars";
+import {useNavigate} from "react-router-dom";
+import {REVIEW_ROUTE} from "../utils/consts";
 
 const ReviewItem = ({review, themeMode}) => {
+    const navigate = useNavigate();
+
+    function handleClickAuthorization(id) {
+        navigate(REVIEW_ROUTE + `/${id}`);
+    }
 
     return (
         <Col
+            style={{cursor: "pointer"}}
             key={review.id}
+            onClick={() => handleClickAuthorization(review.id)}
         >
             <Card
                 border={themeMode}
@@ -24,7 +33,7 @@ const ReviewItem = ({review, themeMode}) => {
                         />
                         <div style={{textAlign: "center"}}>
                             <p>
-                                {review.title} {review.score + "/10"}
+                                {review.artWorkName} {review.score + "/10"}
                             </p>
                         </div>
                         <div

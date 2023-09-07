@@ -6,7 +6,7 @@ import {login, registration} from "../http/userAPI";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 
-const Auth = () => {
+const Auth = observer(() => {
     const {user} = useContext(Context);
     const themeColors = user.themeColors;
     const location = useLocation();
@@ -113,6 +113,6 @@ const Auth = () => {
             </Card>
         </Container>
     )
-};
+});
 
 export default Auth;

@@ -8,21 +8,26 @@ import {Container} from "react-bootstrap";
 
 const Alert404 = observer(() => {
     const {user} = useContext(Context);
+    const themeMode = user.themeMode
+    const themeColors = user.themeColors;
     const navigate = useNavigate();
+    console.log(themeMode, themeColors)
 
     return (
         <Container
             className="d-flex justify-content-center align-items-center mt-5"
+            style={{color: themeColors.text, backgroundColor: themeColors.background}}
         >
-        <Alert
-            variant={user.themeMode}
-            onClose={() => navigate(MAIN_ROUTE)}
-            dismissible>
-            <Alert.Heading>Oops! That page doesn't exist!</Alert.Heading>
-            <p>
-                For some unbelievable reason this page is not on the site. Try visiting the others.
-            </p>
-        </Alert>
+            <Alert
+                variant={themeMode}
+                onClose={() => navigate(MAIN_ROUTE)}
+                dismissible
+            >
+                <Alert.Heading>Oops! That page doesn't exist!</Alert.Heading>
+                <p>
+                    For some unbelievable reason this page is not on the site. Try visiting the others.
+                </p>
+            </Alert>
         </Container>
     );
 })

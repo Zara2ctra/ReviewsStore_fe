@@ -4,8 +4,14 @@ import {MdExpandMore} from "react-icons/md";
 
 const ShowMoreButton = ({actions, themeMode, reviews}) => {
 
+    if (reviews.length < 2) {
+        return (
+            <></>
+        )
+    }
+
     return (
-        reviews.length < 4 ?
+        reviews.length <= 2 ?
             <Button
                 className="mx-auto d-block"
                 style={{width: "30rem", marginTop: "1rem"}}
