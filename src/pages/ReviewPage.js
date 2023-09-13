@@ -11,7 +11,7 @@ import CommentListItem from "../components/CommentListItem";
 import {RiSendPlaneFill} from "react-icons/ri";
 import {fetchOneReview} from "../http/reviewAPI";
 
-const socket = socketIO.connect('https://reviews-storebe.onrender.com');
+const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
 const ReviewPage = observer(() => {
     const {user} = useContext(Context);
