@@ -3,12 +3,12 @@ import {darkThemeColors, lightThemeColors} from "../utils/consts";
 
 export default class User {
     constructor() {
-        this._isAuth = true;
+        this._isAuth = false;
         this._user = {};
         this._id = false;
         this._isAdmin = false;
-        this._themeMode = "light";
-        this._themeColors = lightThemeColors;
+        this._themeMode = localStorage.getItem('themeMode') || "light";
+        this._themeColors = this._themeColors = this._themeMode === "dark" ? darkThemeColors : lightThemeColors;
         makeAutoObservable(this)
     }
 
@@ -33,9 +33,6 @@ export default class User {
         this._themeColors = this._themeMode === "dark" ? darkThemeColors : lightThemeColors;
     }
 
-    get secondaryColor() {
-        return this._themeMode === "dark" ? "black" : "white"
-    }
 
     get themeMode() {
         return this._themeMode

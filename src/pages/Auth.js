@@ -15,12 +15,13 @@ const Auth = observer(() => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
     const [name, setName] = useState("");
+
+
     const click = async () => {
         try {
             let data;
             if (isLogin) {
-                const lastLoginDate = new Date()
-                data = await login(email, password, lastLoginDate)
+                data = await login(email, password)
             } else {
                 data = await registration(email, password, name)
             }
@@ -40,7 +41,7 @@ const Auth = observer(() => {
                 height: window.innerHeight - 54,
                 backgroundColor: themeColors.background,
                 color: themeColors.text,
-        }}
+            }}
         >
             <Card
                 style={{width: 600, color: themeColors.text, backgroundColor: themeColors.background,}}
@@ -92,11 +93,13 @@ const Auth = observer(() => {
                     <Row className="d-flex justify-content-between mt-3" style={{width: "70%"}}>
                         {isLogin ?
                             <div>
-                                No account? <NavLink to={REGISTRATION_ROUTE} style={{color: themeColors.text}}>Sign up!</NavLink>
+                                No account? <NavLink to={REGISTRATION_ROUTE} style={{color: themeColors.text}}>Sign
+                                up!</NavLink>
                             </div>
                             :
                             <div>
-                                Got an account? <NavLink to={LOGIN_ROUTE} style={{color: themeColors.text}}>Log in!</NavLink>
+                                Got an account? <NavLink to={LOGIN_ROUTE} style={{color: themeColors.text}}>Log
+                                in!</NavLink>
                             </div>
                         }
                         <div>

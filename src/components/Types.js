@@ -21,6 +21,7 @@ const Types = observer(({themeMode}) => {
             {TYPES_EN.map((type) => {
                 return (
                     <Button
+                        key={type}
                         variant={themeMode}
                         active={type === review.selectedType}
                         onClick={() => clickType(type)}

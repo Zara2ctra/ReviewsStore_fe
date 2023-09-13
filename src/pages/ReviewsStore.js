@@ -1,36 +1,37 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {Container, Row} from "react-bootstrap";
 import {Context} from "../index";
 import ReviewItem from "../components/ReviewItem";
 import ShowMoreButton from "../components/ShowMoreButton";
 import {observer} from "mobx-react-lite";
+import {fetchPopularReviews, fetchRecentReviews} from "../http/reviewAPI";
 
 const ReviewsStore = observer(() => {
     const {user} = useContext(Context);
-    const {review} = useContext(Context)
     let themeColor = user.themeColors;
     let themeMode = user.themeMode;
-    const [popularReview, setPopularReview] = useState(() => getPopularReviews(review.reviews, 2));
-    const [recentReview, setRecentReview] = useState(() => getRecentReviews(review.reviews, 2));
+    const [popularReview, setPopularReview] = useState([]);
+    const [recentReview, setRecentReview] = useState([]);
 
-    function getPopularReviews(review, n) {
-        return review.slice().sort((a, b) => {
-            return b.rating - a.rating;
-        }).slice(0, n)
+    useEffect(() => {
+        const fetchData = async () => {
+            const recentReviews = await fetchRecentReviews();
+            setRecentReview(()=> recentReviews.slice(0, 2));
+
+            const popularReview = await fetchPopularReviews();
+            setPopularReview(()=> popularReview.slice(0, 2));
+        }
+
+        fetchData().then(r => r);
+    }, [])
+
+
+    const showMorePopularReviews = async () => {
+        setPopularReview(await fetchPopularReviews())
     }
 
-    const showMorePopularReviews = () => {
-        setPopularReview(() => getPopularReviews(review.reviews).slice(0, 6))
-    }
-
-    function getRecentReviews(review, n) {
-        return review.slice().sort((a, b) => {
-            return b.id - a.id;
-        }).slice(0, n)
-    }
-
-    const showMoreRecentReviews = () => {
-        setRecentReview(() => getRecentReviews(review.reviews).slice(0, 6))
+    const showMoreRecentReviews = async () => {
+        setRecentReview(await fetchPopularReviews())
     }
 
 

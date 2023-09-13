@@ -5,49 +5,36 @@ import {Container, Row} from "react-bootstrap";
 import ReviewItem from "../components/ReviewItem";
 import ShowMoreButton from "../components/ShowMoreButton";
 import {observer} from "mobx-react-lite";
+import {fetchTypePopularReviews, fetchTypeRecentReviews} from "../http/reviewAPI";
 
 const ReviewsTypeStore = observer(() => {
     const {user} = useContext(Context);
-    const {type} = useParams();
-    const {review} = useContext(Context);
-    const typeReviews = getTypeReviews(review.reviews, type);
+    let {type} = useParams();
+    const [popularTypeReview, setPopularReview] = useState([]);
+    const [recentTypeReview, setRecentReview] = useState([]);
 
     let themeColor = user.themeColors;
     let themeMode = user.themeMode;
 
-    const [popularTypeReview, setPopularReview] = useState(() => getPopularReviews(typeReviews, 2));
-    const [recentTypeReview, setRecentReview] = useState(() => getRecentReviews(typeReviews, 2));
-
     useEffect(() => {
-        const typeReviews = getTypeReviews(review.reviews, type);
-        setPopularReview(() => getPopularReviews(typeReviews, 2));
-        setRecentReview(() => getRecentReviews(typeReviews, 2));
+        const fetchData = async () => {
+            const recentReviews = await fetchTypeRecentReviews(type);
+            setRecentReview(() => recentReviews.slice(0, 2));
+
+            const popularReview = await fetchTypePopularReviews(type);
+            setPopularReview(() => popularReview.slice(0, 2));
+        }
+        fetchData().then(r => r);
     }, [type]);
 
-    function getTypeReviews(reviews, type) {
-        return reviews.filter((review) => review.artWorkType === type)
+
+    const showMorePopularReviews = async () => {
+        setPopularReview(await fetchTypePopularReviews())
     }
 
-    function getPopularReviews(review, n) {
-        return review.slice().sort((a, b) => {
-            return b.rating - a.rating;
-        }).slice(0, n)
+    const showMoreRecentReviews = async () => {
+        setRecentReview(await fetchTypeRecentReviews())
     }
-
-    const showMorePopularReviews = () => {
-        setPopularReview(() => getPopularReviews(typeReviews, 6))
-    }
-
-    function getRecentReviews(review, n) {
-        return review.slice().sort((a, b) => {
-            return b.id - a.id;
-        }).slice(0, n)
-    }
-
-    const showMoreRecentReviews = () => {
-        setRecentReview(() => getRecentReviews(typeReviews, 6))
-    }
-
 
     return (
         <Container>
@@ -82,7 +69,11 @@ const ReviewsTypeStore = observer(() => {
                     xs={1} md={1} className="g-4"
                 >
                     {recentTypeReview.map((review) => (
-                        <ReviewItem key={review.id} review={review} themeMode={themeMode}/>
+                        <ReviewItem
+                            key={review.id}
+                            review={review}
+                            themeMode={themeMode}
+                        />
                     ))}
                 </Row>
                 <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentTypeReview}/>

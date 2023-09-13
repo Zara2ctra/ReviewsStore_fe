@@ -23,7 +23,7 @@ const Stars = ({stars}) => {
 
     return <Container>
         {ratingStar}
-        <p>{stars} review rating</p>
+        <p>{stars} average</p>
     </Container>
 };
 

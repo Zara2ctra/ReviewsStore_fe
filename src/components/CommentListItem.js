@@ -2,10 +2,10 @@ import React from 'react';
 import {Card, ListGroup} from "react-bootstrap";
 import {BiUserCircle} from "react-icons/bi";
 
-const CommentListItem = ({comment, themeMode, themeColors}) => {
+const CommentListItem = ({comment, themeColors}) => {
     return (
         <ListGroup.Item
-            style={{background: themeColors.background, border: "none"}}
+            style={{padding: 0,background: themeColors.background, border: "none"}}
             className={"d-flex"}
         >
             <Card
@@ -20,7 +20,7 @@ const CommentListItem = ({comment, themeMode, themeColors}) => {
                     <BiUserCircle
                         style={{color: themeColors.text, fontSize: '2rem'}}
                     />
-                    <Card.Text>{comment.text}</Card.Text>
+                    <Card.Text>{comment.comment_text}</Card.Text>
                 </Card.Body>
             </Card>
         </ListGroup.Item>

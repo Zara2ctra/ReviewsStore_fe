@@ -1,4 +1,6 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import socketIO from 'socket.io-client';
+import useChat from "../hooks/useChat";
 import MDEditor from '@uiw/react-md-editor';
 import {useParams} from "react-router-dom";
 import {Button, Col, Container, Form, Image, ListGroup, Row} from "react-bootstrap";
@@ -7,130 +9,39 @@ import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import CommentListItem from "../components/CommentListItem";
 import {RiSendPlaneFill} from "react-icons/ri";
+import {fetchOneReview} from "../http/reviewAPI";
 
-const listStyles = {
-    height: '100%',
-}
+const socket = socketIO.connect('https://reviews-storebe.onrender.com');
 
 const ReviewPage = observer(() => {
-    const {user, review} = useContext(Context)
-    const [text, setText] = useState('');
-    const comments = [
-        {
-            text: "Отличный фильм! Очень понравилась игра актеров.",
-            userId: 1,
-            reviewId: 1,
-        },
-        {
-            text: "Сюжет сложный, но интересный. Рекомендую посмотреть.",
-            userId: 2,
-            reviewId: 2,
-        },
-        {
-            text: "Замечательная работа режиссера. Фильм оставил глубокие впечатления.",
-            userId: 3,
-            reviewId: 3,
-        },
-        {
-            text: "Не понял сюжет, но спецэффекты поразили воображение.",
-            userId: 4,
-            reviewId: 4,
-        },
-        {
-            text: "Фильм слишком длинный. Больше 3 часов - это перебор.",
-            userId: 5,
-            reviewId: 5,
-        },
-        {
-            text: "Лучший фильм, который я видел в последнее время.",
-            userId: 6,
-            reviewId: 6,
-        },
-        {
-            text: "Очень трогательный фильм. Закрыл все мои ожидания.",
-            userId: 7,
-            reviewId: 7,
-        },
-        {
-            text: "Монтаж фильма оставляет желать лучшего.",
-            userId: 8,
-            reviewId: 8,
-        },
-        {
-            text: "Неплохой вариант для проведения вечера.",
-            userId: 9,
-            reviewId: 9,
-        },
-        {
-            text: "Смотрел в компании друзей. Все остались довольны.",
-            userId: 10,
-            reviewId: 10,
-        },
-        {
-            text: "Великолепный фильм! Очень рекомендую.",
-            userId: 11,
-            reviewId: 11,
-        },
-        {
-            text: "Забавная комедия. Хорошо поднимает настроение.",
-            userId: 12,
-            reviewId: 12,
-        },
-        {
-            text: "Фильм подходит для любителей научной фантастики.",
-            userId: 13,
-            reviewId: 13,
-        },
-        {
-            text: "Сюжет неожиданный и запоминающийся.",
-            userId: 14,
-            reviewId: 14,
-        },
-        {
-            text: "Очень волнующая история с хорошей игрой актеров.",
-            userId: 15,
-            reviewId: 15,
-        },
-        {
-            text: "Оценка 10/10. Фильм оправдал все ожидания.",
-            userId: 16,
-            reviewId: 16,
-        },
-        {
-            text: "Смотрел в кинотеатре. Эффекты на большом экране впечатляют.",
-            userId: 17,
-            reviewId: 17,
-        },
-        {
-            text: "Необычный сюжет. Фильм заставил задуматься.",
-            userId: 18,
-            reviewId: 18,
-        },
-        {
-            text: "Не рекомендую. Фильм скучный и предсказуемый.",
-            userId: 19,
-            reviewId: 19,
-        },
-        {
-            text: "Мой любимый фильм! Смотрю его уже второй раз.",
-            userId: 20,
-            reviewId: 20,
-        },
-    ];   ///////************************
+    const {user} = useContext(Context);
+    const [currentReview, setCurrentReview] = useState("")
+    const [artwork, setArtwork] = useState("");
+    const [comment, setComment] = useState('');
+    const {id} = useParams();
+    const startChat = useChat(id);
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
-    const {id} = useParams();
-    const currentReview = review.reviews[id - 1];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const reviewData = await fetchOneReview(id);
+            setCurrentReview(reviewData);
+            setArtwork(reviewData.art_work);
+        }
+
+        fetchData().then(r => r);
+    }, [])
 
 
-    const handleChangeText = (e) => {
-        setText(e.target.value)
+    const handleChangeComment = (e) => {
+        setComment(e.target.value)
     }
 
     const handleSendComment = (e) => {
         e.preventDefault()
-        // sendMessage({messageText: messageText, tagList: tags})
-        setText('')
+        startChat.sendMessage({comment_text: comment, userId: user.id, reviewId: id})
+        setComment('')
     }
 
     return (
@@ -139,7 +50,7 @@ const ReviewPage = observer(() => {
             data-bs-theme={themeMode}
             style={{color: themeColors.text, backgroundColor: themeColors.background}}
         >
-            <Row style={{justifyContent: "space-between"}}>
+            <Row style={{justifyContent: "center"}}>
                 <Col md={4}>
                     <Image
                         border={themeMode}
@@ -151,25 +62,25 @@ const ReviewPage = observer(() => {
                 </Col>
                 <Col md={4}>
                     <Row className="d-flex flex-column align-items-center">
-                        <h2>{currentReview.artWorkType}: {currentReview.artWorkName}</h2>
+                        <h2>{artwork.type} : {artwork.name}</h2>
                         <Stars stars={currentReview.rating}/>
                     </Row>
                 </Col>
             </Row>
-            <Row className="d-flex flex-column m-3">
-                <h1>{currentReview.name}</h1>
-                <Row
-                    data-color-mode={themeMode}
-                >
-                    <MDEditor.Markdown
-                        source={currentReview.content_text}
-                    />
-                </Row>
+            <Row className="d-flex flex-column m-3" data-color-mode={themeMode}>
+                <h1 style={{padding: "0"}}>
+                    {currentReview.name} {currentReview.score}/10
+                </h1>
+                <MDEditor.Markdown
+                    source={currentReview.content_text}
+                />
             </Row>
             <Row className="d-flex flex-column m-3">
-                <h1>Comments:</h1>
+                <h1 style={{padding: "0"}}>
+                    Comments:
+                </h1>
                 <ListGroup style={{background: themeColors.background}}>
-                    {comments.map((comment) => (
+                    {startChat.comments.map((comment) => (
                         <CommentListItem
                             key={comment.id}
                             comment={comment}
@@ -178,19 +89,24 @@ const ReviewPage = observer(() => {
                         />
                     ))}
                 </ListGroup>
-                <Form onSubmit={handleSendComment}>
-                    <Form.Group className='d-flex mt-2 gap-3'>
-                        <Form.Control
-                            value={text}
-                            onChange={handleChangeText}
-                            type='text'
-                            placeholder='Write your opinion here...'
-                        />
-                        <Button variant={themeMode} type='submit'>
-                            <RiSendPlaneFill/>
-                        </Button>
-                    </Form.Group>
-                </Form>
+                {user.isAuth ?
+                    <Form onSubmit={handleSendComment} style={{padding: "0"}}>
+                        <Form.Group className='d-flex mt-2 gap-3'>
+                            <Form.Control
+                                value={comment}
+                                onChange={handleChangeComment}
+                                type='text'
+                                placeholder='Write your opinion here...'
+                            />
+                            <Button variant={themeMode} type='submit'>
+                                <RiSendPlaneFill/>
+                            </Button>
+                        </Form.Group>
+                    </Form>
+                    :
+                    <>
+                    </>
+                }
             </Row>
         </Container>
     );
