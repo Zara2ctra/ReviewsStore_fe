@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 const SERVER_URL = 'http://localhost:5000/'
 
 const useChat = (reviewId) => {
-    console.log(reviewId)
     const [comments, setComments] = useState([]);
     const socketRef = useRef(null)
 
@@ -20,7 +19,7 @@ const useChat = (reviewId) => {
         }
     }, [reviewId])
 
-    const sendMessage = ({ comment_text, userId, reviewId}) => {
+    const sendComment = ({ comment_text, userId, reviewId}) => {
         socketRef.current.emit('comment:add', {
             comment_text,
             userId,
@@ -28,7 +27,11 @@ const useChat = (reviewId) => {
         })
     }
 
-    return {comments, sendMessage}
+    const removeComment = (id) => {
+        socketRef.current.emit('comment:remove', id)
+    }
+
+    return {comments, sendComment, removeComment}
 }
 
 export default useChat

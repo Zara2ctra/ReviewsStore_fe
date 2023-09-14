@@ -2,10 +2,12 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {REVIEWS_STORE_ROUTE, TYPES_EN} from "../utils/consts";
-import {Button, Container, ListGroup} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const Types = observer(({themeMode}) => {
+    const { t, i18n } = useTranslation();
     const {review} = useContext(Context);
     const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ const Types = observer(({themeMode}) => {
                         active={type === review.selectedType}
                         onClick={() => clickType(type)}
                     >
-                        {type}
+                        {t(`${type}`)}
                     </Button>
                 )
             })}

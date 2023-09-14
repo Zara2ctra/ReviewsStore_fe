@@ -1,4 +1,5 @@
 import React, {useContext} from 'react';
+import { useTranslation } from 'react-i18next';
 import {Context} from "../index";
 import Alert from 'react-bootstrap/Alert';
 import {useNavigate} from "react-router-dom";
@@ -7,6 +8,7 @@ import {MAIN_ROUTE} from "../utils/consts";
 import {Button, Container} from "react-bootstrap";
 
 const Alert404 = observer(() => {
+    const { t, i18n } = useTranslation();
     const {user} = useContext(Context);
     const themeMode = user.themeMode
     const themeColors = user.themeColors;
@@ -22,9 +24,9 @@ const Alert404 = observer(() => {
                 onClose={() => navigate(MAIN_ROUTE)}
                 dismissible
             >
-                <Alert.Heading>Oops! That page doesn't exist!</Alert.Heading>
+                <Alert.Heading>{t('Oops! That page doesn\'t exist!')}</Alert.Heading>
                 <p>
-                    For some unbelievable reason this page is not on the site. Try visiting the others.
+                    {t('For some unbelievable reason this page is not on the site. Try visiting the others.')}
                 </p>
                 <Button
                     className={"d-flex"}
@@ -32,7 +34,7 @@ const Alert404 = observer(() => {
                     variant={themeMode}
                     onClick={() => navigate(MAIN_ROUTE)}
                 >
-                    Return to main page
+                    {t('Return to main page')}
                 </Button>
             </Alert>
         </Container>

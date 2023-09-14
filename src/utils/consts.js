@@ -10,7 +10,10 @@ export const REVIEW_CREATE_ROUTE = "/add"
 export const REVIEW_ROUTE_EDIT = "/review_edit"
 export const USER_PROFILE_ROUTE = "/user";
 
-export const TYPES_EN = ["ANIME", "GAME", "BOOK", "MOVIE", "SERIES", "CARTOON", "OTHERS"]
+export const myURL = "http://localhost:5000/";
+
+export const TYPES_EN = ["ANIME", "GAME", "BOOK", "MOVIE", "SERIES", "CARTOON", "OTHERS"];
+export const LANG = ['English', 'Français', 'Русский'];
 
 export const lightThemeColors = {
     background: "#eeeeee",
@@ -25,7 +28,7 @@ export const darkThemeColors = {
 export const blankMarkDown = `
 ${faker.word.words(5)}
 =======
-![](${faker.image.cats()})
+![](${faker.image.business()})
 -----------
 
 # ${faker.word.words(5)}
@@ -37,4 +40,4 @@ ${faker.word.words(2)}.
 
 ${faker.word.words(7)} 
 ${faker.word.words(4)}
-`
+`;

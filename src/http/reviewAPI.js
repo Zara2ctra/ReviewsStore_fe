@@ -25,7 +25,6 @@ export const fetchPopularReviews = async () => {
 }
 
 export const fetchTypeRecentReviews = async (type) => {
-    console.log(type)
     const {data} = await $host.get('api/review/' + type)
     return data
 }

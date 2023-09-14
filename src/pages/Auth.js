@@ -5,9 +5,11 @@ import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import {login, registration} from "../http/userAPI";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
+import {useTranslation} from "react-i18next";
 
 const Auth = observer(() => {
     const {user} = useContext(Context);
+    const {t, i18n} = useTranslation();
     const themeColors = user.themeColors;
     const location = useLocation();
     const navigate = useNavigate();
@@ -47,20 +49,20 @@ const Auth = observer(() => {
                 style={{width: 600, color: themeColors.text, backgroundColor: themeColors.background,}}
                 className="p-5"
             >
-                <h2 className="m-auto">{isLogin ? "Authorization" : "Registration"}</h2>
+                <h2 className="m-auto">{isLogin ? t("Authorization") : t("Registration")}</h2>
                 <Form className="d-flex flex-column" data-bs-theme={user.themeMode}>
                     {isLogin ?
                         <div>
                             <Form.Control
                                 className="mt-3"
-                                placeholder="Enter your email address..."
+                                placeholder={t("Enter your email address...")}
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 type="email"
                             />
                             <Form.Control
                                 className="mt-3"
-                                placeholder="Enter your password..."
+                                placeholder={t("Enter your password...")}
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 type="password"
@@ -70,21 +72,21 @@ const Auth = observer(() => {
                         <div>
                             <Form.Control
                                 className="mt-3"
-                                placeholder="Enter your email address..."
+                                placeholder={t("Enter your email address...")}
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 type="email"
                             />
                             <Form.Control
                                 className="mt-3"
-                                placeholder="Enter your password..."
+                                placeholder={t("Enter your password...")}
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 type="password"
                             />
                             <Form.Control
                                 className="mt-3"
-                                placeholder="Enter your name..."
+                                placeholder={t("Enter your name...")}
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                             />
@@ -93,13 +95,21 @@ const Auth = observer(() => {
                     <Row className="d-flex justify-content-between mt-3" style={{width: "70%"}}>
                         {isLogin ?
                             <div>
-                                No account? <NavLink to={REGISTRATION_ROUTE} style={{color: themeColors.text}}>Sign
-                                up!</NavLink>
+                                {t("No account?")} <NavLink
+                                to={REGISTRATION_ROUTE}
+                                style={{color: themeColors.text}}
+                            >
+                                {t('Sign up')}
+                            </NavLink>
                             </div>
                             :
                             <div>
-                                Got an account? <NavLink to={LOGIN_ROUTE} style={{color: themeColors.text}}>Log
-                                in!</NavLink>
+                                {t("Got an account?")} <NavLink
+                                to={LOGIN_ROUTE}
+                                style={{color: themeColors.text}}
+                            >
+                                {t('Log in')}
+                            </NavLink>
                             </div>
                         }
                         <div>
@@ -108,7 +118,7 @@ const Auth = observer(() => {
                                 onClick={click}
                                 variant={user.themeMode}
                             >
-                                {isLogin ? "Log in" : "Sign up"}
+                                {isLogin ? t('Log in') : t('Sign up')}
                             </Button>
                         </div>
                     </Row>

@@ -7,9 +7,11 @@ import {Context} from "./index";
 import {darkThemeColors, lightThemeColors} from "./utils/consts";
 import {Spinner} from "react-bootstrap";
 import {check} from "./http/userAPI";
+import {useTranslation} from "react-i18next";
 
 const App = observer(() => {
     const {user} = useContext(Context);
+    const {t, i18n} = useTranslation();
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -20,7 +22,8 @@ const App = observer(() => {
     }, [user.themeMode]);
 
     useEffect(() => {
-        check().then(data => {
+        check().then(async data => {
+            await i18n.changeLanguage(localStorage.getItem('lang'));
             if (data) {
                 user.setId(data.id);
                 user.setUser(user);

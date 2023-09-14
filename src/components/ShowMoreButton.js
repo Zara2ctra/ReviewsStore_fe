@@ -14,7 +14,7 @@ const ShowMoreButton = ({actions, themeMode, reviews}) => {
         reviews.length <= 2 ?
             <Button
                 className="mx-auto d-block"
-                style={{width: "30rem", marginTop: "1rem"}}
+                style={{width: "15rem", marginTop: "1rem"}}
                 variant={themeMode}
                 onClick={() => actions()}
             >

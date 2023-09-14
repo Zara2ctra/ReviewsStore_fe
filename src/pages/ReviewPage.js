@@ -10,12 +10,17 @@ import {observer} from "mobx-react-lite";
 import CommentListItem from "../components/CommentListItem";
 import {RiSendPlaneFill} from "react-icons/ri";
 import {fetchOneReview} from "../http/reviewAPI";
+import {myURL} from "../utils/consts";
+import {BiLike, BiUserCircle} from "react-icons/bi";
+import {useTranslation} from "react-i18next";
 
-const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
+const socket = socketIO.connect(myURL);
 
 const ReviewPage = observer(() => {
+    const {t, i18n} = useTranslation();
     const {user} = useContext(Context);
-    const [currentReview, setCurrentReview] = useState("")
+    const [currentReview, setCurrentReview] = useState("");
+    const [userInfo, setUserInfo] = useState("");
     const [artwork, setArtwork] = useState("");
     const [comment, setComment] = useState('');
     const {id} = useParams();
@@ -28,6 +33,7 @@ const ReviewPage = observer(() => {
             const reviewData = await fetchOneReview(id);
             setCurrentReview(reviewData);
             setArtwork(reviewData.art_work);
+            setUserInfo(reviewData.user);
         }
 
         fetchData().then(r => r);
@@ -40,8 +46,12 @@ const ReviewPage = observer(() => {
 
     const handleSendComment = (e) => {
         e.preventDefault()
-        startChat.sendMessage({comment_text: comment, userId: user.id, reviewId: id})
+        startChat.sendComment({comment_text: comment, userId: user.id, reviewId: id})
         setComment('')
+    }
+
+    const likeToggle = () => {
+        console.log("LIKE")
     }
 
     return (
@@ -62,13 +72,34 @@ const ReviewPage = observer(() => {
                 </Col>
                 <Col md={4}>
                     <Row className="d-flex flex-column align-items-center">
-                        <h2>{artwork.type} : {artwork.name}</h2>
+                        <Container style={{display: "flex"}}>
+                            <Container>
+                                <BiUserCircle
+                                    style={{color: themeColors.text, fontSize: '3rem'}}
+                                />
+                            </Container>
+                            <Container>
+                                <span
+                                    style={{fontSize: "2rem"}}
+                                >
+                                    {userInfo.name}
+                                </span>
+                            </Container>
+                            <Container>
+                                <BiLike
+                                    style={{cursor: "pointer"}}
+                                    onClick={() => likeToggle()}
+                                />10
+                            </Container>
+                        </Container>
+                        <h2>
+                            {t(`${artwork.type}`)} : {artwork.name}</h2>
                         <Stars stars={currentReview.rating}/>
                     </Row>
                 </Col>
             </Row>
             <Row className="d-flex flex-column m-3" data-color-mode={themeMode}>
-                <h1 style={{padding: "0"}}>
+                <h1 style={{padding: "0 0 20px 0"}}>
                     {currentReview.name} {currentReview.score}/10
                 </h1>
                 <MDEditor.Markdown
@@ -76,16 +107,16 @@ const ReviewPage = observer(() => {
                 />
             </Row>
             <Row className="d-flex flex-column m-3">
-                <h1 style={{padding: "0"}}>
-                    Comments:
+                <h1 style={{padding: "0 0 10px 0"}}>
+                    {t('Comments:')}
+
                 </h1>
-                <ListGroup style={{background: themeColors.background}}>
+                <ListGroup style={{background: themeColors.background, gap: "1rem"}}>
                     {startChat.comments.map((comment) => (
                         <CommentListItem
                             key={comment.id}
                             comment={comment}
-                            themeMode={themeMode}
-                            themeColors={themeColors}
+                            handler={startChat.removeComment}
                         />
                     ))}
                 </ListGroup>
@@ -96,7 +127,7 @@ const ReviewPage = observer(() => {
                                 value={comment}
                                 onChange={handleChangeComment}
                                 type='text'
-                                placeholder='Write your opinion here...'
+                                placeholder={t('Write your opinion here...')}
                             />
                             <Button variant={themeMode} type='submit'>
                                 <RiSendPlaneFill/>

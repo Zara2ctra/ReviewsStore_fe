@@ -5,9 +5,11 @@ import ReviewItem from "../components/ReviewItem";
 import ShowMoreButton from "../components/ShowMoreButton";
 import {observer} from "mobx-react-lite";
 import {fetchPopularReviews, fetchRecentReviews} from "../http/reviewAPI";
+import {useTranslation} from "react-i18next";
 
 const ReviewsStore = observer(() => {
     const {user} = useContext(Context);
+    const {t, i18n} = useTranslation();
     let themeColor = user.themeColors;
     let themeMode = user.themeMode;
     const [popularReview, setPopularReview] = useState([]);
@@ -42,7 +44,7 @@ const ReviewsStore = observer(() => {
                 style={{color: themeColor.text}}
             >
                 <h2>
-                    Popular reviews
+                    {t('Popular reviews')}
                 </h2>
                 <Row
                     xs={1} md={1} className="g-4"
@@ -51,18 +53,17 @@ const ReviewsStore = observer(() => {
                         <ReviewItem
                             key={review.id}
                             review={review}
-                            themeMode={themeMode}
                         />
                     ))}
                 </Row>
-                <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularReview}/>
             </Container>
+            <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularReview}/>
             <Container
                 className={"mt-5"}
                 style={{color: themeColor.text}}
             >
                 <h2>
-                    Recent reviews
+                    {t('Recent reviews')}
                 </h2>
                 <Row
                     xs={1} md={1} className="g-4"

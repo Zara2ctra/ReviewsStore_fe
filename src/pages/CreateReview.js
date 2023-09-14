@@ -5,24 +5,18 @@ import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {blankMarkDown, REVIEW_ROUTE, TYPES_EN} from "../utils/consts";
 import {createArtWork, createReview} from "../http/reviewAPI";
-import {faker} from "@faker-js/faker"
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const CreateReview = observer(() => {
-    const randomType = () => {
-        return TYPES_EN[faker.number.int({min: 0, max: 6})];
-    }
+    const {t, i18n} = useTranslation();
     const {user} = useContext(Context)
     const [file, setFile] = useState('');
-
-
-    // Заменить все юз стейт на один с объектом 57:35!
-
-
-    const [artworkType, setArtworkType] = useState(randomType);
-    const [artworkName, setArtworkName] = useState(faker.music.songName());
-    const [score, setScore] = useState(faker.number.int({min: 0, max: 10}));
-    const [name, setName] = useState(faker.music.songName());
+    const [artworkType, setArtworkType] = useState('');
+    const [artworkName, setArtworkName] = useState('');
+    console.log(artworkType)
+    const [score, setScore] = useState('');
+    const [name, setName] = useState('');
     const [text, setText] = useState(blankMarkDown);
     const [validated, setValidated] = useState(false);
     const navigate = useNavigate()
@@ -48,29 +42,33 @@ const CreateReview = observer(() => {
         setName(e.target.value)
     }
 
+    const createFormData = () => {
+        const data = new FormData();
+        data.append('name', name);
+        data.append('content_text', text);
+        data.append('score', score);
+        data.append('artWorkId', artwork.data.id);
+        data.append('userId', user.id);
+        data.append('file', file);
+
+        return data
+    }
+
+    const sendReview = async () => {
+        const artwork = await createArtWork(artworkName, t('en', `${artworkType}`));
+        const formData = createFormData()
+        const reviewResponse = await createReview(formData);
+        navigate(REVIEW_ROUTE + "/" + reviewResponse);
+    }
+
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
-        console.log(form.checkValidity())
         if (form.checkValidity() === false) {
             event.preventDefault();
-            event.stopPropagation();
         } else {
             event.preventDefault();
-            event.stopPropagation();
-
-            const artwork = await createArtWork(artworkName, artworkType);
-            console.log(artwork.data);
-
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('content_text', text);
-            formData.append('score', score);
-            formData.append('artWorkId', artwork.data.id);
-            formData.append('userId', user.id);
-            formData.append('file', file);
-
-            const reviewResponse = await createReview(formData);
-            navigate(REVIEW_ROUTE + "/" + reviewResponse);
+            await i18n.changeLanguage('en');
+           // await sendReview()
         }
         setValidated(true);
     };
@@ -95,10 +93,14 @@ const CreateReview = observer(() => {
                                     className={"mb-3 ms-4"}
                                     required
                                 >
-                                    <option>{artworkType}</option>
+                                    <option
+                                        disabled selected hidden
+                                    >
+                                        {t('Choose the type of artwork')}
+                                    </option>
                                     {TYPES_EN.map((type) => {
                                         return (
-                                            <option key={type}>{type}</option>
+                                            <option key={type}>{t(`${type}`)}</option>
                                         )
                                     })}
                                 </Form.Select>
@@ -106,7 +108,7 @@ const CreateReview = observer(() => {
                             <Form.Group className={"d-flex"} as={Col} md="12" controlId="validationCustom02">
                                 <Form.Control
                                     type="text"
-                                    placeholder="The name of your artwork"
+                                    placeholder={t("The name of your artwork")}
                                     value={artworkName}
                                     onChange={handleChangeArtWork}
                                     className={"mb-3 ms-4"}
@@ -130,17 +132,17 @@ const CreateReview = observer(() => {
                         <Form.Control
                             className={"mb-3"}
                             type="text"
-                            placeholder="The name of your review"
+                            placeholder={t("The name of your review")}
                             value={name}
                             onChange={handleChangeName}
                             required
                         />
                     </Form.Group>
-                    <Form.Group className={"d-flex"} as={Col} md="2" controlId="validationCustom05">
+                    <Form.Group className={"d-flex"} as={Col} md="3" controlId="validationCustom05">
                         <Form.Control
                             className={"mb-3"}
                             type="number"
-                            placeholder="Score"
+                            placeholder={t("Score")}
                             min={0}
                             max={10}
                             value={score}
@@ -167,7 +169,7 @@ const CreateReview = observer(() => {
                         variant={themeMode}
                         type="submit"
                     >
-                        Submit review
+                        {t('Submit review')}
                     </Button>
                 </Row>
             </Form>

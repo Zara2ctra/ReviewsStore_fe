@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Context} from "../index";
-import {Button, Container, Form, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Button, Container, Form, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE, REVIEW_CREATE_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
@@ -8,9 +8,12 @@ import {FiMoon, FiSun} from "react-icons/fi";
 import {BiMessageSquareAdd, BiSearchAlt, BiUserCircle} from "react-icons/bi";
 import LogoSVG from "../utils/logo.svg";
 import Types from "./Types";
+import {useTranslation} from "react-i18next";
+import LanguageSelect from "./LanguageSelect";
 
 const NavBar = observer(() => {
     const {user} = useContext(Context);
+    const { t, i18n } = useTranslation();
     const isDarkMode = user.themeMode === "dark";
     const themeMode = user.themeMode
     const themeColors = user.themeColors;
@@ -36,20 +39,25 @@ const NavBar = observer(() => {
     return (
         <Container>
             <Navbar
-                style={{color: themeColors.text, backgroundColor: themeColors.background}}
+                style={{
+                    color: themeColors.text,
+                    backgroundColor: themeColors.background,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    padding: "10px"
+            }}
             >
                 <Container>
                     <NavLink
                         style={{color: themeColors.text,}}
                         to={MAIN_ROUTE}
                     >
-                        <img
+                        <Image
                             style={{
                                 color: themeColors.text,
                                 backgroundColor: themeColors.background,
                                 width: "15em",
                                 height: "5em"
-
                             }}
                             alt="logo"
                             src={LogoSVG}
@@ -59,7 +67,7 @@ const NavBar = observer(() => {
                         <Form.Control
                             data-bs-theme={themeMode}
                             type="search"
-                            placeholder="Search"
+                            placeholder={t("Search")}
                             className="me-2"
                             aria-label="Search"
                         />
@@ -70,7 +78,7 @@ const NavBar = observer(() => {
                         </Button>
                     </Form>
                     {user.isAuth ?
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto p-2">
                             <Button
                                 variant={themeMode}
                                 className={"m-lg-1"}
@@ -87,15 +95,22 @@ const NavBar = observer(() => {
                                     />
                                 }
                             >
-                                <NavDropdown.Item>Profile</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleClickCreateReview}>
-                                    Add new review
+                                <NavDropdown.Item>
+                                    {t('Profile')}
                                 </NavDropdown.Item>
-                                <NavDropdown.Item>Some text</NavDropdown.Item>
+                                <NavDropdown.Item
+                                    onClick={handleClickCreateReview}
+                                >
+                                    {t('Add new review')}
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    {t('Some text')}
+                                </NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 <NavDropdown.Item
                                     onClick={() => logOut()}
-                                >Sign out
+                                >
+                                    {t('Sign out')}
                                 </NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
@@ -106,14 +121,14 @@ const NavBar = observer(() => {
                                 className={"m-lg-1"}
                                 onClick={handleClickAuthorization}
                             >
-                                Authorization
+                                {t('Authorization')}
                             </Button>
                             <Button
                                 variant={themeMode}
                                 className={"m-lg-1"}
                                 onClick={handleClickRegistration}
                             >
-                                Registration
+                                {t('Registration')}
                             </Button>
                         </Nav>
                     }
@@ -134,6 +149,9 @@ const NavBar = observer(() => {
                             localStorage.setItem('themeMode', user.themeMode);
                         }}
                     />
+                    <Form>
+                        <LanguageSelect/>
+                    </Form>
                 </Container>
             </Navbar>
             <Container>
