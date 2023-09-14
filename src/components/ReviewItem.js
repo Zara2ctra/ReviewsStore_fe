@@ -1,12 +1,12 @@
-import React, {useContext} from 'react';
-import {Card, Col, Image} from "react-bootstrap";
+import React, {useContext, useEffect, useState} from 'react';
+import {Card, Container, Image} from "react-bootstrap";
 import Stars from "./Stars";
 import {useNavigate} from "react-router-dom";
 import {REVIEW_ROUTE} from "../utils/consts";
 import MDEditor from "@uiw/react-md-editor";
-import {BiLike, BiUserCircle} from "react-icons/bi";
 import {Context} from "../index";
 import {useTranslation} from "react-i18next";
+import ReviewItemTitle from "./ReviewItemTitle";
 
 const footerBlur = {
     position: "absolute",
@@ -25,77 +25,81 @@ const ReviewItem = (({review}) => {
     const navigate = useNavigate();
     let themeColor = user.themeColors;
     let themeMode = user.themeMode;
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 768);
+        };
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, []);
+
+    const rootStyles = {
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: isSmallScreen ? "column" : "row",
+        justifyContent: "space-between",
+    };
+
+    const imageContainerStyles = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    };
 
     function handleClickAuthorization(id) {
         navigate(REVIEW_ROUTE + `/${id}`);
     }
 
     return (
-        <Col
-            style={{cursor: "pointer", display: "flex"}}
+        <div
+            style={rootStyles}
             key={review.id}
             onClick={() => handleClickAuthorization(review.id)}
         >
-            <Image
-                width="150rem"
-                height="150rem"
-                src={review.imageUrl}
-                alt="review image"
-                className={"m-1"}
-                border={themeMode}
-                rounded
-            />
-            <Card
-                border={themeMode}
-                data-bs-theme={themeMode}
-                data-color-mode={themeMode}
-            >
-                <Card.Body>
-                    <Card.Title
-                        className={"d-flex justify-content-between"}
-                        style={{flexWrap: "wrap"}}
-                    >
-                        <div style={{display: "flex", gap: "0.5rem", flexWrap: "inherit"}}>
-                            <BiUserCircle
-                                style={{color: themeColor.text, fontSize: '3rem'}}
-                            />
-                            <span
-                                style={{fontSize: "2rem"}}
-                            >
-                                {review.user.name}
-                            </span>
-                            <BiLike/><span>10</span>
-                        </div>
-                        <div>
-                            <span
-                                style={{textAlign: "center", fontSize: "2.5rem"}}
-                            >
-                                {t(`${review.art_work.type}`)} : {review.art_work.name} {review.score + "/10"}
-                            </span>
-                        </div>
-                        <div
-                            style={{textAlign: "end"}}
-                        >
-                            <Stars stars={review.rating}/>
-                        </div>
-                    </Card.Title>
-                    <Card.Text>
-                        {review.content_text.length > 200 ?
+            <div style={imageContainerStyles}>
+                <Image
+                    style={{maxWidth: "10rem", maxHeight: "15rem"}}
+                    src={review.imageUrl}
+                    alt="review image"
+                    className={"m-1"}
+                    border={themeMode}
+                    rounded
+                />
+                <div>
+                    <Stars stars={review.rating}/>
+                </div>
+            </div>
+            <Container>
+                <Card
+                    border={themeMode}
+                    data-bs-theme={themeMode}
+                    data-color-mode={themeMode}
+                >
+                    <Card.Body>
+                        <ReviewItemTitle
+                            t={t}
+                            themeColor={themeColor}
+                            userReview={review.user}
+                            artworkReview={review.art_work}
+                            reviewScore={review.score}
+                        />
+                        <Card.Text>
                             <MDEditor.Markdown
-                                source={review.content_text.slice(0, 200) + "..."}
+                                source={review.content_text.slice(0, 100)}
                             />
-                            :
-                            <MDEditor.Markdown
-                                source={review.content_text}
-                            />
-                        }
-                    </Card.Text>
-                </Card.Body>
-                <div
-                    style={footerBlur}
-                ></div>
-            </Card>
-        </Col>
+                        </Card.Text>
+                    </Card.Body>
+                    <div
+                        style={footerBlur}
+                    ></div>
+                </Card>
+            </Container>
+        </div>
     )
 });
 

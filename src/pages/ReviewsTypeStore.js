@@ -9,8 +9,8 @@ import {fetchTypePopularReviews, fetchTypeRecentReviews} from "../http/reviewAPI
 import {useTranslation} from "react-i18next";
 
 const ReviewsTypeStore = observer(() => {
-    const {user} = useContext(Context);
     const {t, i18n} = useTranslation();
+    const {user} = useContext(Context);
     let {type} = useParams();
     const [popularTypeReview, setPopularReview] = useState([]);
     const [recentTypeReview, setRecentReview] = useState([]);
@@ -39,53 +39,37 @@ const ReviewsTypeStore = observer(() => {
     }
 
     return (
-        <Container>
-            <Container
-                className={"mt-5"}
-                style={{color: themeColor.text}}
-            >
-                <h2>
-                    {t('Popular reviews')}
-                </h2>
-                <Row
-                    xs={1} md={1} className="g-4"
-                >
-                    {popularTypeReview.map((review) => (
-                        <ReviewItem
-                            key={review.id}
-                            review={review}
-                            themeMode={themeMode}
-                        />
-                    ))}
-                </Row>
-                <ShowMoreButton
-                    actions={showMorePopularReviews}
-                    themeMode={themeMode}
-                    reviews={popularTypeReview}
-                />
+        <Container
+            className={"mt-5"}
+            style={{color: themeColor.text}}
+        >
+            <h2>
+                {t('Popular reviews')}
+            </h2>
+            <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
+                {popularTypeReview.map((review) => (
+                    <ReviewItem
+                        key={review.id}
+                        review={review}
+                    />
+                ))}
             </Container>
-            <Container
-                className={"mt-5"}
-                style={{color: themeColor.text}}
-            >
-                <h2>
-                    {t('Recent reviews')}
-                </h2>
-                <Row
-                    xs={1} md={1} className="g-4"
-                >
-                    {recentTypeReview.map((review) => (
-                        <ReviewItem
-                            key={review.id}
-                            review={review}
-                            themeMode={themeMode}
-                        />
-                    ))}
-                </Row>
-                <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentTypeReview}/>
+            <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularTypeReview}/>
+            <h2>
+                {t('Recent reviews')}
+            </h2>
+            <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
+                {recentTypeReview.map((review) => (
+                    <ReviewItem
+                        key={review.id}
+                        review={review}
+                        themeMode={themeMode}
+                    />
+                ))}
             </Container>
+            <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentTypeReview}/>
         </Container>
     );
-})
+});
 
 export default ReviewsTypeStore;

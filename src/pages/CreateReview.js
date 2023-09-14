@@ -4,9 +4,10 @@ import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {blankMarkDown, REVIEW_ROUTE, TYPES_EN} from "../utils/consts";
-import {createArtWork, createReview} from "../http/reviewAPI";
+import {createReview} from "../http/reviewAPI";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {createArtWork} from "../http/artworkAPI";
 
 const CreateReview = observer(() => {
     const {t, i18n} = useTranslation();
@@ -94,7 +95,10 @@ const CreateReview = observer(() => {
                                     required
                                 >
                                     <option
-                                        disabled selected hidden
+                                        value=""
+                                        disabled
+                                        selected
+                                        hidden
                                     >
                                         {t('Choose the type of artwork')}
                                     </option>
