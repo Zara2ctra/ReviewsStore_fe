@@ -4,6 +4,7 @@ import App from './App';
 import User from "./reviewsStore/User";
 import Review from "./reviewsStore/Review";
 import "./i18n";
+import "./style.css";
 
 export const Context = createContext(null);
 

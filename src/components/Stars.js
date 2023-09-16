@@ -4,7 +4,7 @@ import {Rating} from 'react-simple-star-rating'
 
 const Stars = ({rate, handler, isAuth}) => {
     return (
-        <Container style={{textAlign: "end"}}>
+        <Container style={{textAlign: "center"}}>
             {isAuth ? (
                 <Rating
                     initialValue={rate}

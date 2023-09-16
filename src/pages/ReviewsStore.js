@@ -19,9 +19,9 @@ const ReviewsStore = observer(() => {
     useEffect(() => {
         const fetchData = async () => {
             const recentReviews = await fetchRecentReviews();
-            setRecentReview(() => recentReviews.slice(0, 2));
-
             const popularReview = await fetchPopularReviews();
+
+            setRecentReview(() => recentReviews.slice(0, 2));
             setPopularReview(() => popularReview.slice(0, 2));
         }
         fetchData().then(r => r);
@@ -41,7 +41,7 @@ const ReviewsStore = observer(() => {
             className={"mt-5"}
             style={{color: themeColor.text}}
         >
-            <h2>
+            <h2 style={{margin: "40px"}}>
                 {t('Popular reviews')}
             </h2>
             <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
@@ -53,7 +53,7 @@ const ReviewsStore = observer(() => {
                 ))}
             </Container>
             <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularReview}/>
-            <h2>
+            <h2 style={{margin: "40px"}}>
                 {t('Recent reviews')}
             </h2>
             <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>

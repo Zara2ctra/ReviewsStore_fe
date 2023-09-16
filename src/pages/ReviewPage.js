@@ -8,7 +8,6 @@ import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import CommentListItem from "../components/CommentListItem";
 import {fetchOneReview} from "../http/reviewAPI";
-import {myURL} from "../utils/consts";
 import {BiLike, BiUserCircle} from "react-icons/bi";
 import {useTranslation} from "react-i18next";
 import CommentFooter from "../components/CommentFooter";
@@ -16,7 +15,7 @@ import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
 
-const socket = socketIO.connect('reviews-storebe.onrender.com:10000');
+const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
 const ReviewPage = observer(() => {
     const {t, i18n} = useTranslation();
@@ -29,31 +28,38 @@ const ReviewPage = observer(() => {
         likesNumber: 0,
         rating: 2.5,
     });
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
 
     const {id} = useParams();
     const startChat = useChat(id);
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
 
+    const fetchData = async () => {
+        const reviewData = await fetchOneReview(id);
+        const likeStatus = await fetchLikeStatus(user.id, id);
+        const likesNumber = await fetchNumberLikes(reviewData.user.id);
+        const rating = await getReviewRating(id);
+
+        setReviewData({
+            reviewInfo: reviewData,
+            artwork: reviewData.art_work,
+            userInfo: reviewData.user,
+            likeStatus: likeStatus,
+            likesNumber: likesNumber,
+            rating: rating.calculatedRate,
+            ratingCount: rating.count,
+        });
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            const reviewData = await fetchOneReview(id);
-            const likeStatus = await fetchLikeStatus(user.id, id);
-            const likesNumber = await fetchNumberLikes(reviewData.user.id);
-            const rating = await getReviewRating(id);
-
-            setReviewData({
-                reviewInfo: reviewData,
-                artwork: reviewData.art_work,
-                userInfo: reviewData.user,
-                likeStatus: likeStatus,
-                likesNumber: likesNumber,
-                rating: rating.calculatedRate,
-                ratingCount: rating.count,
-            });
-        }
-
         fetchData().then(r => r);
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, [])
 
     const toggleLikeHandler = async () => {
@@ -79,14 +85,31 @@ const ReviewPage = observer(() => {
         })
     }
 
+
+    const handleResize = () => {
+        setIsSmallScreen(window.innerWidth <= 768);
+    };
+
     return (
         <Container
             className="mt-3"
             data-bs-theme={themeMode}
-            style={{color: themeColors.text, backgroundColor: themeColors.background}}
+            style={{
+                color: themeColors.text,
+                backgroundColor: themeColors.background
+            }}
         >
-            <div style={{display: "inline-flex", alignItems: "flex-start"}}>
-                <Container>
+            <div style={{
+                display: "inline-flex",
+                flexDirection: isSmallScreen ? "column-reverse" : "row",
+                alignItems: "flex-start",
+                width: "100%"
+            }}>
+                <Container style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}>
                     <Image
                         border={themeMode}
                         width={300}

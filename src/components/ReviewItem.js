@@ -8,34 +8,25 @@ import {Context} from "../index";
 import {useTranslation} from "react-i18next";
 import ReviewItemTitle from "./ReviewItemTitle";
 import {fetchLikeStatus, fetchNumberLikes} from "../http/likeAPI";
-import {fetchOneReview} from "../http/reviewAPI";
 import {getReviewRating} from "../http/ratingAPI";
-
-const footerBlur = {
-    position: "absolute",
-    bottom: "0",
-    left: "0",
-    width: "100%",
-    height: "70px",
-    background: `linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5))`,
-    backdropFilter: "blur(10px)",
-    borderRadius: "0 0 10px 10px",
-}
 
 const ReviewItem = (({review}) => {
     const {user} = useContext(Context);
-    const [likeStatus, setLikeStatus] = useState(false);
-    const [likesNumber, setLikesNumber] = useState(0);
-    const [rating, setRating] = useState(0)
     const {t, i18n} = useTranslation();
     const navigate = useNavigate();
-    let themeColors = user.themeColors;
-    let themeMode = user.themeMode;
+    const [reviewInfo, setReviewInfo] = useState({
+        likeStatus: false,
+        likesNumber: 0,
+        rating: 0,
+    });
     const [isSmallScreen, setIsSmallScreen] = useState(false);
 
-    function handleClickAuthorization(id) {
+    let themeColors = user.themeColors;
+    let themeMode = user.themeMode;
+
+    const handleClickAuthorization = (id) => {
         navigate(REVIEW_ROUTE + `/${id}`);
-    }
+    };
 
     const handleResize = () => {
         setIsSmallScreen(window.innerWidth <= 768);
@@ -43,23 +34,24 @@ const ReviewItem = (({review}) => {
 
     useEffect(() => {
         const fetchLikesData = async () => {
-
             const likeStatus = await fetchLikeStatus(user.id, review.id);
             const likesNumber = await fetchNumberLikes(review.user.id);
             const rating = await getReviewRating(review.id);
-            setLikeStatus(likeStatus)
-            setLikesNumber(likesNumber)
-            setRating(rating)
+
+            setReviewInfo({
+                likeStatus,
+                likesNumber,
+                rating,
+            });
         }
 
         fetchLikesData().then(r => r)
 
         window.addEventListener('resize', handleResize);
         handleResize();
-
         return () => {
-            window.removeEventListener('resize', handleResize)
-        }
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const rootStyles = {
@@ -69,19 +61,17 @@ const ReviewItem = (({review}) => {
         justifyContent: "space-between",
     };
 
-    const imageContainerStyles = {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-    };
-
     return (
         <div
             style={rootStyles}
             key={review.id}
             onClick={() => handleClickAuthorization(review.id)}
         >
-            <div style={imageContainerStyles}>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+            }}>
                 <Image
                     style={{maxWidth: "10rem", maxHeight: "15rem"}}
                     src={review.imageUrl}
@@ -91,9 +81,9 @@ const ReviewItem = (({review}) => {
                     rounded
                 />
                 <Stars
-                    rate={rating.calculatedRate}
+                    rate={reviewInfo.rating.calculatedRate}
                     isAuth={false}
-                /> {t("average")} {rating.calculatedRate} ({rating.count} {t("times rated")})
+                /> {t("average")} {reviewInfo.rating.calculatedRate} ({reviewInfo.rating.count} {t("times rated")})
             </div>
             <Container>
                 <Card
@@ -105,8 +95,8 @@ const ReviewItem = (({review}) => {
                         <ReviewItemTitle
                             t={t}
                             review={review}
-                            likeStatus={likeStatus}
-                            likesNumber={likesNumber}
+                            likeStatus={reviewInfo.likeStatus}
+                            likesNumber={reviewInfo.likesNumber}
                             themeColors={themeColors}
                         />
                         <Card.Text>
@@ -115,7 +105,18 @@ const ReviewItem = (({review}) => {
                             />
                         </Card.Text>
                     </Card.Body>
-                    <div style={footerBlur}></div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: "0",
+                            left: "0",
+                            width: "100%",
+                            height: "70px",
+                            background: `linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5))`,
+                            backdropFilter: "blur(10px)",
+                            borderRadius: "0 0 10px 10px",
+                        }}
+                    ></div>
                 </Card>
             </Container>
         </div>
