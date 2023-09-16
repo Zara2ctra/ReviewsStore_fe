@@ -15,7 +15,7 @@ import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
 
-const socket = socketIO.connect('http://localhost:5000');
+const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
 const ReviewPage = observer(() => {
     const {t, i18n} = useTranslation();
