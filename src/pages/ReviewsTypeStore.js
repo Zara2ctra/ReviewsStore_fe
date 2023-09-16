@@ -31,11 +31,13 @@ const ReviewsTypeStore = observer(() => {
 
 
     const showMorePopularReviews = async () => {
-        setPopularReview(await fetchTypePopularReviews())
+        const popularReview = await fetchTypePopularReviews()
+        setPopularReview(popularReview)
     }
 
     const showMoreRecentReviews = async () => {
-        setRecentReview(await fetchTypeRecentReviews())
+        const popularReview = await fetchTypeRecentReviews()
+        setRecentReview(popularReview)
     }
 
     return (
