@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
-import {Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import ReviewItem from "../components/ReviewItem";
 import ShowMoreButton from "../components/ShowMoreButton";
 import {observer} from "mobx-react-lite";

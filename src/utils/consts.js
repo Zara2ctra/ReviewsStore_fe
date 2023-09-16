@@ -1,5 +1,3 @@
-import {faker} from "@faker-js/faker"
-
 export const MAIN_ROUTE = "/";
 export const ADMIN_ROUTE = "/admin";
 export const LOGIN_ROUTE = "/login";
@@ -10,7 +8,7 @@ export const REVIEW_CREATE_ROUTE = "/add"
 export const REVIEW_ROUTE_EDIT = "/review_edit"
 export const USER_PROFILE_ROUTE = "/user";
 
-export const myURL = "http://localhost:5000/";
+export const myURL = "https://reviews-storebe.onrender.com:10000/";
 
 export const TYPES_EN = ["ANIME", "GAME", "BOOK", "MOVIE", "SERIES", "CARTOON", "OTHERS"];
 export const LANG = ['English', 'Français', 'Русский'];
@@ -26,18 +24,13 @@ export const darkThemeColors = {
 };
 
 export const blankMarkDown = `
-${faker.word.words(5)}
+Let's to text
 =======
-![](${faker.image.business()})
 -----------
 
-# ${faker.word.words(5)}
+# VERY BIG TEXT
 
-## ${faker.word.words(5)}
+## BigText
 
-${faker.word.words(3)}
-${faker.word.words(2)}.
 
-${faker.word.words(7)} 
-${faker.word.words(4)}
 `;

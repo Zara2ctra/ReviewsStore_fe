@@ -46,10 +46,17 @@ const Auth = observer(() => {
             }}
         >
             <Card
-                style={{width: 600, color: themeColors.text, backgroundColor: themeColors.background,}}
+                style={{
+                    width: 600,
+                    color: themeColors.text,
+                    backgroundColor:
+                    themeColors.background,
+                }}
                 className="p-5"
             >
-                <h2 className="m-auto">{isLogin ? t("Authorization") : t("Registration")}</h2>
+                <h2 className="m-auto">
+                    {isLogin ? t("Authorization") : t("Registration")}
+                </h2>
                 <Form className="d-flex flex-column" data-bs-theme={user.themeMode}>
                     {isLogin ?
                         <div>

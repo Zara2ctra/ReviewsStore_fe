@@ -12,54 +12,54 @@ import {createArtWork} from "../http/artworkAPI";
 const CreateReview = observer(() => {
     const {t, i18n} = useTranslation();
     const {user} = useContext(Context)
-    const [file, setFile] = useState('');
-    const [artworkType, setArtworkType] = useState('');
-    const [artworkName, setArtworkName] = useState('');
-    console.log(artworkType)
-    const [score, setScore] = useState('');
-    const [name, setName] = useState('');
-    const [text, setText] = useState(blankMarkDown);
+    const [formData, setFormData] = useState({
+        file: '',
+        artworkType: '',
+        artworkName: '',
+        score: '',
+        name: '',
+        text: blankMarkDown,
+    });
     const [validated, setValidated] = useState(false);
     const navigate = useNavigate()
 
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
 
-    const handleChangeType = (e) => {
-        setArtworkType(e.target.value)
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     }
 
-    const handleChangeArtWork = (e) => {
-        setArtworkName(e.target.value)
+    const handleChangeFile = (e) => {
+        setFormData({
+            ...formData,
+            file: e.target.files[0],
+        });
     }
 
-    const handleChangeScore = (e) => {
-        if (e.target.value >= 0 && e.target.value <= 10) {
-            setScore(e.target.value)
-        }
-    }
-
-    const handleChangeName = (e) => {
-        setName(e.target.value)
-    }
-
-    const createFormData = () => {
+    const createFormData = (artwork) => {
         const data = new FormData();
-        data.append('name', name);
-        data.append('content_text', text);
-        data.append('score', score);
+        console.log(data)
+        data.append('name', formData.name);
+        data.append('content_text', formData.text);
+        data.append('score', formData.score);
         data.append('artWorkId', artwork.data.id);
         data.append('userId', user.id);
-        data.append('file', file);
+        data.append('file', formData.file);
 
+        console.log(data)
         return data
     }
 
     const sendReview = async () => {
-        const artwork = await createArtWork(artworkName, t('en', `${artworkType}`));
-        const formData = createFormData()
-        const reviewResponse = await createReview(formData);
-        navigate(REVIEW_ROUTE + "/" + reviewResponse);
+        const artwork = await createArtWork(formData.artworkName, t('en', `${formData.artworkType}`));
+        const finalData = createFormData(artwork);
+        const currentReviewId = await createReview(finalData);
+        navigate(REVIEW_ROUTE + "/" + currentReviewId);
     }
 
     const handleSubmit = async (event) => {
@@ -68,15 +68,10 @@ const CreateReview = observer(() => {
             event.preventDefault();
         } else {
             event.preventDefault();
-            await i18n.changeLanguage('en');
-           // await sendReview()
+            await sendReview();
         }
         setValidated(true);
     };
-
-    const handleChangeFile = (e) => {
-        setFile(e.target.files[0]);
-    }
 
     return (
         <Container
@@ -90,7 +85,8 @@ const CreateReview = observer(() => {
                         <Row className="d-flex flex-column align-items-center">
                             <Form.Group className={"d-flex"} as={Col} md="12" controlId="validationCustom01">
                                 <Form.Select
-                                    onChange={handleChangeType}
+                                    name="artworkType"
+                                    onChange={handleChange}
                                     className={"mb-3 ms-4"}
                                     required
                                 >
@@ -112,9 +108,10 @@ const CreateReview = observer(() => {
                             <Form.Group className={"d-flex"} as={Col} md="12" controlId="validationCustom02">
                                 <Form.Control
                                     type="text"
+                                    name="artworkName"
                                     placeholder={t("The name of your artwork")}
-                                    value={artworkName}
-                                    onChange={handleChangeArtWork}
+                                    value={formData.artworkName}
+                                    onChange={handleChange}
                                     className={"mb-3 ms-4"}
                                     required
                                 />
@@ -136,9 +133,10 @@ const CreateReview = observer(() => {
                         <Form.Control
                             className={"mb-3"}
                             type="text"
+                            name="name"
                             placeholder={t("The name of your review")}
-                            value={name}
-                            onChange={handleChangeName}
+                            value={formData.name}
+                            onChange={handleChange}
                             required
                         />
                     </Form.Group>
@@ -146,11 +144,12 @@ const CreateReview = observer(() => {
                         <Form.Control
                             className={"mb-3"}
                             type="number"
+                            name="score"
                             placeholder={t("Score")}
                             min={0}
                             max={10}
-                            value={score}
-                            onChange={handleChangeScore}
+                            value={formData.score}
+                            onChange={handleChange}
                             required
                         />
                         <h2 className={"ms-3"}>
@@ -162,8 +161,8 @@ const CreateReview = observer(() => {
                     <MDEditor
                         controlId="validationCustom05"
                         height={"100%"}
-                        value={text}
-                        onChange={setText}
+                        value={formData.text}
+                        onChange={(value) => setFormData({ ...formData, text: value })}
                         required
                     />
                 </Row>

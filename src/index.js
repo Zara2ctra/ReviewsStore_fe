@@ -4,10 +4,8 @@ import App from './App';
 import User from "./reviewsStore/User";
 import Review from "./reviewsStore/Review";
 import "./i18n";
-import './index.css';
 
 export const Context = createContext(null);
-
 
 const root = createRoot(document.getElementById('root'));
 

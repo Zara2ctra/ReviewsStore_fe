@@ -7,6 +7,9 @@ import MDEditor from "@uiw/react-md-editor";
 import {Context} from "../index";
 import {useTranslation} from "react-i18next";
 import ReviewItemTitle from "./ReviewItemTitle";
+import {fetchLikeStatus, fetchNumberLikes} from "../http/likeAPI";
+import {fetchOneReview} from "../http/reviewAPI";
+import {getReviewRating} from "../http/ratingAPI";
 
 const footerBlur = {
     position: "absolute",
@@ -21,18 +24,39 @@ const footerBlur = {
 
 const ReviewItem = (({review}) => {
     const {user} = useContext(Context);
+    const [likeStatus, setLikeStatus] = useState(false);
+    const [likesNumber, setLikesNumber] = useState(0);
+    const [rating, setRating] = useState(0)
     const {t, i18n} = useTranslation();
     const navigate = useNavigate();
-    let themeColor = user.themeColors;
+    let themeColors = user.themeColors;
     let themeMode = user.themeMode;
     const [isSmallScreen, setIsSmallScreen] = useState(false);
 
+    function handleClickAuthorization(id) {
+        navigate(REVIEW_ROUTE + `/${id}`);
+    }
+
+    const handleResize = () => {
+        setIsSmallScreen(window.innerWidth <= 768);
+    };
+
     useEffect(() => {
-        const handleResize = () => {
-            setIsSmallScreen(window.innerWidth <= 768);
-        };
+        const fetchLikesData = async () => {
+
+            const likeStatus = await fetchLikeStatus(user.id, review.id);
+            const likesNumber = await fetchNumberLikes(review.user.id);
+            const rating = await getReviewRating(review.id);
+            setLikeStatus(likeStatus)
+            setLikesNumber(likesNumber)
+            setRating(rating)
+        }
+
+        fetchLikesData().then(r => r)
+
         window.addEventListener('resize', handleResize);
         handleResize();
+
         return () => {
             window.removeEventListener('resize', handleResize)
         }
@@ -51,10 +75,6 @@ const ReviewItem = (({review}) => {
         alignItems: "center"
     };
 
-    function handleClickAuthorization(id) {
-        navigate(REVIEW_ROUTE + `/${id}`);
-    }
-
     return (
         <div
             style={rootStyles}
@@ -70,9 +90,10 @@ const ReviewItem = (({review}) => {
                     border={themeMode}
                     rounded
                 />
-                <div>
-                    <Stars stars={review.rating}/>
-                </div>
+                <Stars
+                    rate={rating.calculatedRate}
+                    isAuth={false}
+                /> {t("average")} {rating.calculatedRate} ({rating.count} {t("times rated")})
             </div>
             <Container>
                 <Card
@@ -83,10 +104,10 @@ const ReviewItem = (({review}) => {
                     <Card.Body>
                         <ReviewItemTitle
                             t={t}
-                            themeColor={themeColor}
-                            userReview={review.user}
-                            artworkReview={review.art_work}
-                            reviewScore={review.score}
+                            review={review}
+                            likeStatus={likeStatus}
+                            likesNumber={likesNumber}
+                            themeColors={themeColors}
                         />
                         <Card.Text>
                             <MDEditor.Markdown
@@ -94,9 +115,7 @@ const ReviewItem = (({review}) => {
                             />
                         </Card.Text>
                     </Card.Body>
-                    <div
-                        style={footerBlur}
-                    ></div>
+                    <div style={footerBlur}></div>
                 </Card>
             </Container>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import {Card, Container} from "react-bootstrap";
 import {BiLike, BiUserCircle} from "react-icons/bi";
 
-const ReviewItemTitle = ({themeColor, userReview, artworkReview, reviewScore, t}) => {
+const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, t}) => {
 
     return (
         <Card.Title
@@ -11,14 +11,30 @@ const ReviewItemTitle = ({themeColor, userReview, artworkReview, reviewScore, t}
         >
             <Container style={{display: "flex", gap: "0.5rem"}}>
                 <BiUserCircle
-                    style={{color: themeColor.text, fontSize: '3rem'}}
+                    style={{color: themeColors.text, fontSize: '3rem'}}
                 />
                 <span
                     style={{fontSize: "2rem"}}
                 >
-                    {userReview.name}
+                    {review.user.name}
                 </span>
-                <BiLike/><span>10</span>
+                {likeStatus ? (
+                    <BiLike
+                        style={{
+                            color: "green",
+                        }}
+                    />
+                ) : (
+                    <BiLike
+                        style={{
+                            color: themeColors.text,
+                        }}
+                    />
+                )
+                }
+                <span>
+                    {likesNumber}
+                </span>
             </Container>
             <Container style={{
                 display: "flex",
@@ -27,10 +43,10 @@ const ReviewItemTitle = ({themeColor, userReview, artworkReview, reviewScore, t}
                 flexWrap: "wrap"
             }}>
                 <div>
-                    {t(`${artworkReview.type}`)} : {artworkReview.name}
+                    {t(`${review?.art_work?.type}`)} : {review?.art_work?.name}
                 </div>
                 <div>
-                    {t("Score") + ": " + reviewScore + "/10"}
+                    {t("Score") + ": " + review.score + "/10"}
                 </div>
             </Container>
         </Card.Title>
