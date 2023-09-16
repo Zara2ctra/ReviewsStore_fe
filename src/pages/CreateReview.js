@@ -8,6 +8,7 @@ import {createReview} from "../http/reviewAPI";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {createArtWork} from "../http/artworkAPI";
+import {languageMappings} from "../i18n";
 
 const CreateReview = observer(() => {
     const {t, i18n} = useTranslation();
@@ -56,7 +57,9 @@ const CreateReview = observer(() => {
     }
 
     const sendReview = async () => {
-        const artwork = await createArtWork(formData.artworkName, t('en', `${formData.artworkType}`));
+        const currentLanguage = i18n.language;
+        const englishTypeValue = languageMappings[currentLanguage][formData?.artworkType];
+        const artwork = await createArtWork(formData.artworkName, englishTypeValue);
         const finalData = createFormData(artwork);
         const currentReviewId = await createReview(finalData);
         navigate(REVIEW_ROUTE + "/" + currentReviewId);

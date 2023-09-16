@@ -10,8 +10,8 @@ const resources = {
             'less than a minute ago': 'less than a minute ago',
             'minutes ago': 'minutes ago',
             'hours ago': 'hours ago',
-            'Profile' : 'Profile',
-            'Add new review' : 'Add new review',
+            'Profile': 'Profile',
+            'Add new review': 'Add new review',
             'Some text': 'Some text',
             'Sign out': 'Sign out',
             'Authorization': 'Authorization',
@@ -50,13 +50,13 @@ const resources = {
     fr: {
         translation: {
             'Oops! That page doesn\'t exist!': 'Oups ! Cette page n\'existe pas !',
-            'For some unbelievable reason this page is not on the site. Try visiting the others.':'Pour une raison incroyable, cette page ne figure pas sur le site. Essayez de visiter les autres.',
+            'For some unbelievable reason this page is not on the site. Try visiting the others.': 'Pour une raison incroyable, cette page ne figure pas sur le site. Essayez de visiter les autres.',
             'Return to main page': 'Retour à la page principale',
             'less than a minute ago': 'il y a moins d\'une minute',
             'minutes ago': 'il y a quelques minutes',
             'hours ago': 'il y a quelques heures',
-            'Profile' : 'Profil',
-            'Add new review' : 'Ajouter un nouvel avis',
+            'Profile': 'Profil',
+            'Add new review': 'Ajouter un nouvel avis',
             'Some text': 'Some text',
             'Sign out': 'Sortir',
             'Authorization': 'Autorisation',
@@ -94,13 +94,13 @@ const resources = {
     ру: {
         translation: {
             'Oops! That page doesn\'t exist!': 'Упс! Этой страницы не существует!',
-            'For some unbelievable reason this page is not on the site. Try visiting the others.':'По какой-то невероятной причине эта страница отсутствует на сайте. Попробуйте посетить другие.',
+            'For some unbelievable reason this page is not on the site. Try visiting the others.': 'По какой-то невероятной причине эта страница отсутствует на сайте. Попробуйте посетить другие.',
             'Return to main page': 'Вернуться на главную страницу',
             'less than a minute ago': 'менее минуты назад',
             'minutes ago': 'минут назад',
             'hours ago': 'час(ов) назад',
-            'Profile' : 'Профиль' ,
-            'Add new review' : 'Добавить новый обзор',
+            'Profile': 'Профиль',
+            'Add new review': 'Добавить новый обзор',
             'Some text': 'Some text',
             'Sign out': 'Выйти',
             'Authorization': 'Авторизация',
@@ -137,11 +137,41 @@ const resources = {
     }
 };
 
+export const languageMappings = {
+    ру: {
+        "АНИМЕ": "ANIME",
+        "ИГРЫ": "GAME",
+        "КНИГИ": "BOOK",
+        "ФИЛЬМЫ": "MOVIE",
+        "СЕРИАЛЫ": "SERIES",
+        "МУЛЬТФИЛЬМЫ": "CARTOON",
+        "ДРУГОЕ": "OTHERS",
+    },
+    en: {
+        "ANIME": "ANIME",
+        "GAME": "GAME",
+        "BOOK": "BOOK",
+        "MOVIE": "MOVIE",
+        "SERIES": "SERIES",
+        "CARTOON": "CARTOON",
+        "OTHERS": "OTHERS",
+    },
+    fr: {
+        "ANIME": "ANIME",
+        "JEU": "GAME",
+        "LIVRE": "BOOK",
+        "FILM": "MOVIE",
+        "SÉRIES": "SERIES",
+        "CARTOON": "CARTOON",
+        'AUTRES': "OTHERS",
+    },
+};
+
 i18n
     .use(initReactI18next)
     .init({
         resources,
-        lng: "ru",
+        lng: "en",
         interpolation: {
             escapeValue: false
         }

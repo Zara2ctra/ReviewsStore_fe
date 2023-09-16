@@ -15,7 +15,7 @@ import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
 
-const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
+const socket = socketIO.connect('http://localhost:5000');
 
 const ReviewPage = observer(() => {
     const {t, i18n} = useTranslation();
@@ -170,7 +170,13 @@ const ReviewPage = observer(() => {
                 <MDEditor.Markdown
                     source={reviewData.reviewInfo.content_text}
                 />
-                <Stars handler={handleRating} isAuth={user.isAuth}/>
+                {user.isAuth ? (
+                    <Stars handler={handleRating} isAuth={user.isAuth}/>
+                ) : (
+                    <>
+                    </>
+                )
+                }
             </Row>
             <Row className="d-flex flex-column m-3">
                 <h1 style={{padding: "0 0 10px 0"}}>

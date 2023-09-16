@@ -25,12 +25,12 @@ export const fetchPopularReviews = async () => {
 }
 
 export const fetchTypeRecentReviews = async (type) => {
-    const {data} = await $host.get('api/review/' + type)
+    const {data} = await $host.get('api/review/recent/' + type)
     return data
 }
 
 export const fetchTypePopularReviews = async (type) => {
-    const {data} = await $host.get('api/review/' + type)
+    const {data} = await $host.get('api/review/popular/' + type)
     return data
 }
 
