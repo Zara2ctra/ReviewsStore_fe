@@ -3,17 +3,17 @@ import socketIO from 'socket.io-client';
 import useChat from "../hooks/useChat";
 import MDEditor from '@uiw/react-md-editor';
 import {useParams} from "react-router-dom";
-import {Container, Image, ListGroup, Row} from "react-bootstrap";
+import {Container, ListGroup, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import CommentListItem from "../components/CommentListItem";
 import {fetchOneReview} from "../http/reviewAPI";
-import {BiLike, BiUserCircle} from "react-icons/bi";
 import {useTranslation} from "react-i18next";
 import CommentFooter from "../components/CommentFooter";
 import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
+import ReviewInfo from "../components/ReviewInfo";
 
 const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
@@ -99,70 +99,14 @@ const ReviewPage = observer(() => {
                 backgroundColor: themeColors.background
             }}
         >
-            <div style={{
-                display: "inline-flex",
-                flexDirection: isSmallScreen ? "column-reverse" : "row",
-                alignItems: "flex-start",
-                width: "100%"
-            }}>
-                <Container style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}>
-                    <Image
-                        border={themeMode}
-                        width={300}
-                        height={300}
-                        src={reviewData.reviewInfo.imageUrl}
-                        thumbnail
-                    />
-                    <Stars
-                        rate={reviewData.rating}
-                        handler={handleRating}
-                        isAuth={false}
-                    /> {t("average")} {reviewData.rating} ({reviewData.ratingCount} {t("times rated")})
-                </Container>
-                <Container className="d-flex flex-column align-items-center justify-content-center">
-                    <h2>
-                        {t(`${reviewData.artwork.type}`)}: <br/>
-                        {reviewData.artwork.name}
-                    </h2>
-                    <div
-                        style={{
-                            display: "inline-flex",
-                            cursor: user.isAuth ? "pointer" : ""
-                        }}
-                        onClick={user.isAuth ?
-                            toggleLikeHandler
-                            :
-                            () => user.isAuth
-                        }
-                    >
-                        <BiUserCircle style={{color: themeColors.text, fontSize: '3rem'}}/>
-                        <span style={{fontSize: "1.5rem"}}>
-                            {reviewData.userInfo.name}
-                        </span>
-                        {reviewData.likeStatus ? (
-                            <BiLike
-                                style={{
-                                    color: "green",
-                                }}
-                            />
-                        ) : (
-                            <BiLike
-                                style={{
-                                    color: themeColors.text,
-                                }}
-                            />
-                        )
-                        }
-                        <span>
-                            {reviewData.likesNumber}
-                        </span>
-                    </div>
-                </Container>
-            </div>
+            <ReviewInfo
+                reviewData={reviewData}
+                isSmallScreen={isSmallScreen}
+                handleRating={handleRating}
+                toggleLikeHandler={toggleLikeHandler}
+                themeMode={themeMode}
+                themeColors={themeColors}
+            />
             <Row className="d-flex flex-column m-3" data-color-mode={themeMode}>
                 <h1 style={{padding: "0 0 20px 0"}}>
                     {reviewData.reviewInfo.name} {reviewData.reviewInfo.score}/10

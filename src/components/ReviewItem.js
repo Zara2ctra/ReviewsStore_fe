@@ -98,6 +98,7 @@ const ReviewItem = (({review}) => {
                             likeStatus={reviewInfo.likeStatus}
                             likesNumber={reviewInfo.likesNumber}
                             themeColors={themeColors}
+                            isSmallScreen={isSmallScreen}
                         />
                         <Card.Text>
                             <MDEditor.Markdown

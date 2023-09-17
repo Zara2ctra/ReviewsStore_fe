@@ -44,15 +44,12 @@ const CreateReview = observer(() => {
 
     const createFormData = (artwork) => {
         const data = new FormData();
-        console.log(data)
         data.append('name', formData.name);
         data.append('content_text', formData.text);
         data.append('score', formData.score);
         data.append('artWorkId', artwork.data.id);
         data.append('userId', user.id);
         data.append('file', formData.file);
-
-        console.log(data)
         return data
     }
 
@@ -63,14 +60,14 @@ const CreateReview = observer(() => {
         const finalData = createFormData(artwork);
         const currentReviewId = await createReview(finalData);
         navigate(REVIEW_ROUTE + "/" + currentReviewId);
-    }
+    };
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
+            event.stopPropagation();
         } else {
-            event.preventDefault();
             await sendReview();
         }
         setValidated(true);

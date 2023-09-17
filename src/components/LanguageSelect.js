@@ -22,9 +22,7 @@ const LanguageSelect = () => {
             data-bs-theme={themeMode}
             required
         >
-            <option
-                disabled selected hidden
-            >
+            <option disabled selected hidden>
                 {t('Choose the language')}
             </option>
             {LANG.map((lang) => {

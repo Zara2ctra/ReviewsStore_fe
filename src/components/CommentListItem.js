@@ -8,14 +8,11 @@ import {useTranslation} from "react-i18next";
 
 const CommentListItem = ({comment, handler}) => {
     const {user} = useContext(Context);
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
     const isYourComment = comment.userId === user.id;
     let themeColors = user.themeColors;
 
-    const formatDate = (date) => {
-        const now = new Date();
-        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-
+    const formatDate = (diffInMinutes, date) => {
         if (diffInMinutes < 1) {
             return t('less than a minute ago');
         } else if (diffInMinutes < 60) {
@@ -25,6 +22,12 @@ const CommentListItem = ({comment, handler}) => {
         } else {
             return format(date, 'dd.MM.yyyy HH:mm');
         }
+    }
+
+    const getFormatDate = (date) => {
+        const now = new Date();
+        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+        return formatDate(diffInMinutes, date)
     };
 
     return (
@@ -51,7 +54,7 @@ const CommentListItem = ({comment, handler}) => {
                         <Container
                             style={{fontSize: "0.8rem", display: "flex", justifyContent: "end", gap: "1rem"}}
                         >
-                            {formatDate(new Date(comment.createdAt))}
+                            {getFormatDate(new Date(comment.createdAt))}
                             <AiOutlineCloseCircle
                                 style={{color: themeColors.text, fontSize: '1.5rem', cursor: "pointer"}}
                                 onClick={() => handler(comment.id)}
@@ -61,7 +64,7 @@ const CommentListItem = ({comment, handler}) => {
                         <Container
                             style={{fontSize: "0.8rem", display: "flex", justifyContent: "end"}}
                         >
-                            {formatDate(new Date(comment.createdAt))}
+                            {getFormatDate(new Date(comment.createdAt))}
                         </Container>
                     }
                 </Card.Header>

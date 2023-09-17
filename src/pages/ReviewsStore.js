@@ -1,71 +1,71 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Context} from "../index";
-import {Container} from "react-bootstrap";
-import ReviewItem from "../components/ReviewItem";
-import ShowMoreButton from "../components/ShowMoreButton";
-import {observer} from "mobx-react-lite";
-import {fetchPopularReviews, fetchRecentReviews} from "../http/reviewAPI";
-import {useTranslation} from "react-i18next";
+import {useParams} from 'react-router-dom';
+import {Container} from 'react-bootstrap';
+import {observer} from 'mobx-react-lite';
+import {useTranslation} from 'react-i18next';
+import ReviewList from '../components/ReviewList';
+import {
+    fetchPopularReviews,
+    fetchRecentReviews,
+    fetchTypePopularReviews,
+    fetchTypeRecentReviews
+} from '../http/reviewAPI';
+import {Context} from '../index';
 
 const ReviewsStore = observer(() => {
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const {user} = useContext(Context);
-    const [popularReview, setPopularReview] = useState([]);
-    const [recentReview, setRecentReview] = useState([]);
+    const {type} = useParams();
+    const [reviews, setReviews] = useState({
+        popularReviews: [],
+        recentReviews: [],
+    });
+    const [showAllRecentReviews, setShowAllRecentReviews] = useState(false);
+    const [showAllPopularReviews, setShowAllPopularReviews] = useState(false);
 
-    let themeColor = user.themeColors;
-    let themeMode = user.themeMode;
+    const isTypePage = !!type;
+
+    const fetchData = async (type) => {
+        const recentReviews = isTypePage ? await fetchTypeRecentReviews(type) : await fetchRecentReviews();
+        const popularReviews = isTypePage ? await fetchTypePopularReviews(type) : await fetchPopularReviews();
+
+        setReviews((prevReviews) => ({
+            ...prevReviews,
+            recentReviews: recentReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+            popularReviews: popularReviews.sort((a, b) => b.rating - a.rating),
+        }));
+        setShowAllRecentReviews(false);
+        setShowAllPopularReviews(false);
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const recentReviews = await fetchRecentReviews();
-            const popularReview = await fetchPopularReviews();
+        fetchData(type);
+    }, [type]);
 
-            setRecentReview(() => recentReviews.slice(0, 2));
-            setPopularReview(() => popularReview.slice(0, 2));
+    const showMoreReviews = (name) => {
+        if (name === 'showAllRecentReviews') {
+            setShowAllRecentReviews(true);
+        } else if (name === 'showAllPopularReviews') {
+            setShowAllPopularReviews(true);
         }
-        fetchData().then(r => r);
-    }, [])
-
-
-    const showMorePopularReviews = async () => {
-        setPopularReview(await fetchPopularReviews())
-    }
-
-    const showMoreRecentReviews = async () => {
-        setRecentReview(await fetchPopularReviews())
-    }
+    };
 
     return (
-        <Container
-            className={"mt-5"}
-            style={{color: themeColor.text}}
-        >
-            <h2 style={{margin: "40px"}}>
-                {t('Popular reviews')}
-            </h2>
-            <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
-                {popularReview.map((review) => (
-                    <ReviewItem
-                        key={review.id}
-                        review={review}
-                    />
-                ))}
-            </Container>
-            <ShowMoreButton actions={showMorePopularReviews} themeMode={themeMode} reviews={popularReview}/>
-            <h2 style={{margin: "40px"}}>
-                {t('Recent reviews')}
-            </h2>
-            <Container style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
-                {recentReview.map((review) => (
-                    <ReviewItem
-                        key={review.id}
-                        review={review}
-                        themeMode={themeMode}
-                    />
-                ))}
-            </Container>
-            <ShowMoreButton actions={showMoreRecentReviews} themeMode={themeMode} reviews={recentReview}/>
+        <Container className={'mt-5'} style={{color: user.themeColors.text}}>
+            <h2 style={{margin: '40px'}}>{t('Popular reviews')}</h2>
+            <ReviewList
+                reviews={reviews.popularReviews}
+                showAll={showAllPopularReviews}
+                showMore={() => showMoreReviews('showAllPopularReviews')}
+                themeMode={user.themeMode}
+            />
+            <h2 style={{margin: '40px'}}>{t('Recent reviews')}</h2>
+            <ReviewList
+                reviews={reviews.recentReviews}
+                showAll={showAllRecentReviews}
+                showMore={() => showMoreReviews('showAllRecentReviews')}
+                themeMode={user.themeMode}
+            />
         </Container>
     );
 });

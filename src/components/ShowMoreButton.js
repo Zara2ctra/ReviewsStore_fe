@@ -2,26 +2,21 @@ import React from 'react';
 import {Button} from "react-bootstrap";
 import {MdExpandMore} from "react-icons/md";
 
-const ShowMoreButton = ({actions, themeMode, reviews}) => {
-
-    if (reviews.length < 2) {
-        return (
-            <></>
-        )
-    }
-
+const ShowMoreButton = ({actions, themeMode, showAll, isShow}) => {
     return (
-        reviews.length <= 2 ?
+        isShow ? (
             <Button
                 className="mx-auto d-block"
                 style={{width: "15rem", marginTop: "1rem"}}
                 variant={themeMode}
-                onClick={() => actions()}
+                onClick={() => actions(showAll)}
             >
                 <MdExpandMore/>
             </Button>
-         : <></>
-    )
+        ) : (
+            <></>
+        )
+    );
 };
 
 export default ShowMoreButton;

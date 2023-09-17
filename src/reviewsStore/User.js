@@ -9,6 +9,7 @@ export default class User {
         this._isAdmin = false;
         this._themeMode = localStorage.getItem('themeMode') || "light";
         this._themeColors = this._themeColors = this._themeMode === "dark" ? darkThemeColors : lightThemeColors;
+        this._selectedType = {};
         makeAutoObservable(this)
     }
 
@@ -33,6 +34,9 @@ export default class User {
         this._themeColors = this._themeMode === "dark" ? darkThemeColors : lightThemeColors;
     }
 
+    setSelectedType(type) {
+        this._selectedType = type
+    }
 
     get themeMode() {
         return this._themeMode
@@ -56,5 +60,9 @@ export default class User {
 
     get id() {
         return this._id;
+    }
+
+    get selectedType() {
+        return this._selectedType
     }
 }

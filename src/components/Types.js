@@ -8,11 +8,11 @@ import {useTranslation} from "react-i18next";
 
 const Types = observer(({themeMode}) => {
     const { t, i18n } = useTranslation();
-    const {review} = useContext(Context);
+    const {user} = useContext(Context);
     const navigate = useNavigate();
 
     const clickType = (type) => {
-        review.setSelectedType(type);
+        user.setSelectedType(type);
         navigate(`${REVIEWS_STORE_ROUTE}/${type}`);
     }
 
@@ -25,7 +25,7 @@ const Types = observer(({themeMode}) => {
                     <Button
                         key={type}
                         variant={themeMode}
-                        active={type === review.selectedType}
+                        active={type === user.selectedType}
                         onClick={() => clickType(type)}
                     >
                         {t(`${type}`)}
