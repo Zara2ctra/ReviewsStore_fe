@@ -34,6 +34,11 @@ export const fetchTypePopularReviews = async (type) => {
     return data
 }
 
+export const fetchReviewsByQuery = async (query) => {
+    const {data} = await $host.get(`/api/review/search?query=${query}`);
+    return data;
+};
+
 export const fetchOneReview = async (id) => {
     const {data} = await $host.get('api/review/id/' + id)
     return data

@@ -11,7 +11,8 @@ const ReviewStoreLogo = ({themeColors, handleMain}) => {
                 color: themeColors.text,
                 backgroundColor: themeColors.background,
                 width: "15em",
-                height: "5em"
+                height: "5em",
+                cursor: "pointer",
             }}
             alt="logo"
             src={LogoSVG}

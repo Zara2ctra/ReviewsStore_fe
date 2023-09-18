@@ -14,6 +14,7 @@ import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
 import ReviewInfo from "../components/ReviewInfo";
+import {format} from "date-fns";
 
 const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
@@ -60,7 +61,7 @@ const ReviewPage = observer(() => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [])
+    }, [id])
 
     const toggleLikeHandler = async () => {
         await toggleLike(user.id, id);

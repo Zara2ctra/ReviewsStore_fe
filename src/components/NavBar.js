@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import {Container, Form, Navbar} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE, REVIEW_CREATE_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE, REVIEW_CREATE_ROUTE, USER_PROFILE_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import Types from "./Types";
 import {useTranslation} from "react-i18next";
@@ -11,7 +11,7 @@ import ThemeToggle from "./ThemeToogle";
 import UserActions from "./UserActions";
 import GuestActions from "./GuestActions";
 import ReviewStoreLogo from "./ReviewStoreLogo";
-import GlobalSearch from "./GlobalSearch";
+import GlobalSearch from "./GlobalSearch.js";
 
 const NavBar = observer(() => {
     const {user} = useContext(Context);
@@ -33,6 +33,7 @@ const NavBar = observer(() => {
     const handleLogout = () => {
         user.setUser({});
         user.setIsAuth(false);
+        navigate(MAIN_ROUTE)
     };
 
     const navbarStyles = {
@@ -48,13 +49,14 @@ const NavBar = observer(() => {
             <Navbar style={navbarStyles}>
                 <Container>
                     <ReviewStoreLogo themeColors={themeColors} handleMain={() => handleNavigation(MAIN_ROUTE)}/>
-                    <GlobalSearch themeMode={themeMode} t={t}/>
+                    <GlobalSearch themeMode={themeMode} t={t} navigate={navigate}/>
                     {user.isAuth ? (
                         <UserActions
                             themeMode={themeMode}
                             themeColors={themeColors}
                             handleCreateReview={() => handleNavigation(REVIEW_CREATE_ROUTE)}
                             handleLogout={handleLogout}
+                            handleUserProfile={() => handleNavigation(USER_PROFILE_ROUTE + `/${user.id}`)}
                             t={t}
                         />
                     ) : (

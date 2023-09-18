@@ -1,15 +1,17 @@
 import {
-    MAIN_ROUTE, ADMIN_ROUTE,
-    LOGIN_ROUTE, REGISTRATION_ROUTE,
-    USER_PROFILE_ROUTE, REVIEW_ROUTE,
-    REVIEWS_STORE_ROUTE, REVIEW_ROUTE_EDIT, REVIEW_CREATE_ROUTE
+    LOGIN_ROUTE,
+    MAIN_ROUTE,
+    REGISTRATION_ROUTE,
+    REVIEW_CREATE_ROUTE,
+    REVIEW_ROUTE,
+    REVIEWS_STORE_ROUTE,
+    USER_PROFILE_ROUTE
 } from "./utils/consts";
 import ReviewsStore from "./pages/ReviewsStore";
 import Auth from "./pages/Auth";
 import ReviewPage from "./pages/ReviewPage";
 import CreateReview from "./pages/CreateReview";
 import UserPage from "./pages/UserPage";
-import Admin from "./pages/Admin";
 
 export const authRoutes = [
     {
@@ -23,15 +25,15 @@ export const authRoutes = [
     {
         path: REVIEWS_STORE_ROUTE + '/:type',
         Component: ReviewsStore
-    },,
+    }, ,
     {
         path: REVIEW_CREATE_ROUTE,
         Component: CreateReview
     },
-    // {
-    //     path: USER_PROFILE_ROUTE + '/:id',
-    //     Component: UserPage
-    // },
+    {
+        path: USER_PROFILE_ROUTE + '/:id',
+        Component: UserPage
+    },
     // {
     //     path: REVIEW_ROUTE_EDIT + '/:id',
     //     Component: ReviewPage

@@ -4,10 +4,13 @@ import {useTranslation} from 'react-i18next';
 import Stars from './Stars';
 import {BiLike, BiUserCircle} from "react-icons/bi";
 import {Context} from "../index";
+import {format} from "date-fns";
 
 const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler, themeMode, themeColors}) => {
     const {user} = useContext(Context)
     const {t} = useTranslation();
+    console.log(reviewData)
+    const reviewCreatedDate = new Date(reviewData?.reviewInfo?.createdAt || new Date());
 
     return (
         <div style={{
@@ -70,7 +73,8 @@ const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler,
                     }
                     <span>
                             {reviewData.likesNumber}
-                        </span>
+                    </span> <br/>
+                    {format(reviewCreatedDate, 'dd.MM.yyyy HH:mm')}
                 </div>
             </Container>
         </div>

@@ -43,8 +43,7 @@ const resources = {
             'Popular reviews': 'Popular reviews',
             'Recent reviews': 'Recent reviews',
             'Choose the language': 'Choose the language',
-
-
+            'Not found': 'Not found',
         }
     },
     fr: {
@@ -88,7 +87,7 @@ const resources = {
             'Popular reviews': 'Revue de presse',
             'Recent reviews': 'Examens récents',
             'Choose the language': 'Choisir la langue',
-
+            'Not found': 'Non trouvé',
         }
     },
     ру: {
@@ -132,7 +131,7 @@ const resources = {
             'Popular reviews': 'Популярные обзоры',
             'Recent reviews': 'Последние обзоры',
             'Choose the language': 'Выберите язык',
-
+            'Not found': 'Не найдено'
         }
     }
 };
