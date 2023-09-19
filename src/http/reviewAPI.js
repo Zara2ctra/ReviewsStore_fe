@@ -14,6 +14,11 @@ export const fetchReviews = async () => {
     return data
 }
 
+export const fetchUsersReviews = async (userId) => {
+    const {data} = await $host.get('api/review/' + userId)
+    return data
+}
+
 export const fetchRecentReviews = async () => {
     const {data} = await $host.get('api/review/recent')
     return data
