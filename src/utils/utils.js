@@ -1,10 +1,19 @@
 import {darkThemeColors, lightThemeColors} from "./consts";
 
-export const setUserAuth = (user, data) => {
+export let emptyReview = {
+    id: null,
+    name: '',
+    score: 0,
+    rating: 0,
+    createdAt: ''
+};
+
+export const setUserAuth = async (user, data) => {
     if (data) {
-        user.setId(data.id);
+        user.setId(data[0].id);
         user.setUser(user);
         user.setIsAuth(true);
+        user.setIsAdmin(data[1] === "ADMIN");
     } else {
         user.setId(null);
         user.setUser(null);

@@ -8,8 +8,6 @@ export const REVIEW_CREATE_ROUTE = "/add"
 export const REVIEW_ROUTE_EDIT = "/review_edit"
 export const USER_PROFILE_ROUTE = "/user";
 
-export const myURL = "https://reviews-storebe.onrender.com/";
-
 export const TYPES_EN = ["ANIME", "GAME", "BOOK", "MOVIE", "SERIES", "CARTOON", "OTHERS"];
 export const LANG = ['English', 'Français', 'Русский'];
 
@@ -31,6 +29,8 @@ Let's to text
 # VERY BIG TEXT
 
 ## BigText
+
+
 
 
 `;

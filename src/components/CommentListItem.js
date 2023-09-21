@@ -6,7 +6,7 @@ import {format} from 'date-fns';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import {useTranslation} from "react-i18next";
 
-const CommentListItem = ({comment, handler, navigateUserPage, isAuth}) => {
+const CommentListItem = ({comment, handler, navigateUserPage, isAuth, isAdmin}) => {
     const {user} = useContext(Context);
     const {t, i18n} = useTranslation();
     const isYourComment = comment.userId === user.id;
@@ -54,7 +54,7 @@ const CommentListItem = ({comment, handler, navigateUserPage, isAuth}) => {
                         />
                         {comment.user.name}
                     </Container>
-                    {isYourComment ?
+                    {isYourComment || isAdmin ?
                         <Container
                             style={{fontSize: "0.8rem", display: "flex", justifyContent: "end", gap: "1rem"}}
                         >

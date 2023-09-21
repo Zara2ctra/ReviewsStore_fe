@@ -115,19 +115,21 @@ const ReviewPage = observer(() => {
                 themeColors={themeColors}
             />
             <Row className="d-flex flex-column m-3" data-color-mode={themeMode}>
-                <h1 style={{padding: "0 0 20px 0"}}>
-                    {reviewData.reviewInfo.name} {reviewData.reviewInfo.score}/10
+                <h1 style={{padding: "0 0 20px 0", display: "flex", justifyContent: "space-between"}}>
+                    <span>
+                        {reviewData.reviewInfo.name}
+                    </span>
+                    <span>
+                        {t("Score")}:{reviewData.reviewInfo.score}/10
+                    </span>
                 </h1>
                 <MDEditor.Markdown
+                    style={{padding: "20px"}}
                     source={reviewData.reviewInfo.content_text}
                 />
                 {user.isAuth ? (
                     <Stars handler={handleRating} isAuth={user.isAuth}/>
-                ) : (
-                    <>
-                    </>
-                )
-                }
+                ) : (<></>)}
             </Row>
             <Row className="d-flex flex-column m-3">
                 <h1 style={{padding: "0 0 10px 0"}}>
@@ -140,6 +142,7 @@ const ReviewPage = observer(() => {
                             key={comment.id}
                             comment={comment}
                             isAuth={user.isAuth}
+                            isAdmin={user.isAdmin}
                             handler={startChat.removeComment}
                         />
                     ))}

@@ -1,17 +1,17 @@
 import {
-    LOGIN_ROUTE,
-    MAIN_ROUTE,
-    REGISTRATION_ROUTE,
-    REVIEW_CREATE_ROUTE,
-    REVIEW_ROUTE, REVIEW_ROUTE_EDIT,
+    ADMIN_ROUTE, USER_PROFILE_ROUTE,
+    LOGIN_ROUTE, REGISTRATION_ROUTE,
+    MAIN_ROUTE, REVIEW_ROUTE,
+    REVIEW_CREATE_ROUTE, REVIEW_ROUTE_EDIT,
     REVIEWS_STORE_ROUTE,
-    USER_PROFILE_ROUTE
 } from "./utils/consts";
 import ReviewsStore from "./pages/ReviewsStore";
 import Auth from "./pages/Auth";
 import ReviewPage from "./pages/ReviewPage";
 import CreateOrEditReview from "./pages/CreateOrEditReview";
 import UserPage from "./pages/UserPage";
+import Admin from "./pages/Admin";
+
 export const authRoutes = [
     {
         path: MAIN_ROUTE,
@@ -24,7 +24,7 @@ export const authRoutes = [
     {
         path: REVIEWS_STORE_ROUTE + '/:type',
         Component: ReviewsStore
-    }, ,
+    },
     {
         path: REVIEW_CREATE_ROUTE,
         Component: CreateOrEditReview
@@ -40,10 +40,10 @@ export const authRoutes = [
 ]
 
 export const adminRoutes = [
-    // {
-    //     path: ADMIN_ROUTE,
-    //     Component: Admin
-    // },
+    {
+        path: ADMIN_ROUTE,
+        Component: Admin
+    },
 ]
 
 export const publicRoutes = [

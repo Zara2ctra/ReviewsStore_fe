@@ -2,7 +2,14 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import {Container, Form, Navbar} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE, REVIEW_CREATE_ROUTE, USER_PROFILE_ROUTE} from "../utils/consts";
+import {
+    ADMIN_ROUTE,
+    LOGIN_ROUTE,
+    MAIN_ROUTE,
+    REGISTRATION_ROUTE,
+    REVIEW_CREATE_ROUTE,
+    USER_PROFILE_ROUTE
+} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import Types from "./Types";
 import {useTranslation} from "react-i18next";
@@ -56,6 +63,8 @@ const NavBar = observer(() => {
                             themeColors={themeColors}
                             handleCreateReview={() => handleNavigation(REVIEW_CREATE_ROUTE)}
                             handleLogout={handleLogout}
+                            handleAdminPanel={() => handleNavigation(ADMIN_ROUTE)}
+                            isAdmin={user.isAdmin}
                             handleUserProfile={() => handleNavigation(USER_PROFILE_ROUTE + `/${user.id}`)}
                             t={t}
                         />

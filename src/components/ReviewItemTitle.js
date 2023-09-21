@@ -12,7 +12,7 @@ const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, t, isSma
             style={{flexWrap: "wrap", padding: "0px"}}
         >
             <Container style={{display: "flex", flexWrap: isSmallScreen ? "wrap" : "nowrap"}}>
-                <Container style={{display: "flex", gap: "0.5rem", padding: "0px"}}>
+                <Container style={{display: "flex", gap: "0.5rem",margin: "15px 0" ,padding: "0px", fontWeight: "400",}}>
                     <BiUserCircle
                         style={{color: themeColors.text, fontSize: '3rem'}}
                     />
@@ -21,20 +21,11 @@ const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, t, isSma
                     >
                     {review.user.name}
                 </span>
-                    {likeStatus ? (
-                        <BiLike
-                            style={{
-                                color: "green",
-                            }}
-                        />
-                    ) : (
-                        <BiLike
-                            style={{
-                                color: themeColors.text,
-                            }}
-                        />
-                    )
-                    }
+                    <BiLike
+                        style={{
+                            color: likeStatus ? "green" : themeColors.text,
+                        }}
+                    />
                     <span>
                     {likesNumber}
                 </span>
@@ -46,7 +37,7 @@ const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, t, isSma
             <Container style={{
                 display: "flex",
                 justifyContent: "space-between",
-                fontSize: "2.5rem",
+                fontSize: "2rem",
                 flexWrap: "wrap"
             }}>
                 <div>

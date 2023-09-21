@@ -2,7 +2,12 @@ import React from 'react';
 import {Button, Nav, NavDropdown} from "react-bootstrap";
 import {BiMessageSquareAdd, BiUserCircle} from "react-icons/bi";
 
-const UserActions = ({themeMode, themeColors, handleCreateReview, handleLogout, t, handleUserProfile}) => (
+const UserActions = ({
+                         themeMode, themeColors,
+                         handleCreateReview, handleLogout,
+                         t, handleUserProfile,
+                         isAdmin, handleAdminPanel
+}) => (
     <Nav className="ml-auto p-2">
         <Button variant={themeMode} className="m-lg-1" onClick={handleCreateReview}>
             <BiMessageSquareAdd/>
@@ -14,6 +19,11 @@ const UserActions = ({themeMode, themeColors, handleCreateReview, handleLogout, 
         >
             <NavDropdown.Item onClick={handleUserProfile}>{t('Profile')}</NavDropdown.Item>
             <NavDropdown.Item onClick={handleCreateReview}>{t('Add new review')}</NavDropdown.Item>
+            {isAdmin ?
+                <NavDropdown.Item onClick={handleAdminPanel}>{t('Admin Panel')}</NavDropdown.Item>
+                :
+                <></>
+            }
             <NavDropdown.Divider/>
             <NavDropdown.Item onClick={handleLogout}>{t('Sign out')}</NavDropdown.Item>
         </NavDropdown>

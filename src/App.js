@@ -23,6 +23,7 @@ const App = observer(() => {
             .then(async (data) => {
                 await i18n.changeLanguage(localStorage.getItem("lang"));
                 setUserAuth(user, data);
+                console.log(user.isAdmin)
             })
             .finally(() => setLoading(false));
     }, []);

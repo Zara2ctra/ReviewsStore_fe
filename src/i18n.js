@@ -63,6 +63,10 @@ const resources = {
             'Likes': 'Likes',
             'The value can\'t be that long': 'The value can\'t be that long',
             'Save': 'Save',
+            'Admin Panel': 'Admin Panel',
+            'Review id': 'Review id',
+            'User info': 'User info',
+            'name': 'name',
         }
     },
     fr: {
@@ -126,6 +130,10 @@ const resources = {
             'Likes': 'Lykes',
             'The value can\'t be that long': 'La valeur ne peut pas être aussi longue',
             'Save': 'Économiser',
+            'Admin Panel': 'Panneau d\'administration',
+            'Review id': 'Revue id',
+            'User info': 'Informations sur l\'utilisateur',
+            'name': 'nom',
         }
     },
     ру: {
@@ -189,6 +197,10 @@ const resources = {
             'Likes': 'Лайков',
             'The value can\'t be that long': 'Значение не может быть таким длинным',
             'Save': 'Сохранить',
+            'Admin Panel': 'Админ панель',
+            'Review id': 'ID обзора',
+            'User info': 'Информация о пользователе',
+            'name': 'имя',
         }
     }
 };

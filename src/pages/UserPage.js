@@ -25,6 +25,7 @@ const UserPage = observer(() => {
     });
 
     const isYour = user.id == id;
+    const isAdmin = user.isAdmin;
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
 
@@ -60,7 +61,7 @@ const UserPage = observer(() => {
                 <UserPageReviews
                     themeMode={themeMode}
                     isYour={isYour}
-                    isAdmin={user.isAdmin}
+                    isAdmin={isAdmin}
                     userId={id}
                     toast={toast}
                     t={t}

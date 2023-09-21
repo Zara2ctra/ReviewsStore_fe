@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import "primereact/resources/primereact.min.css";
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
-import {themeSwitcher} from "../utils/utils";
+import {emptyReview, themeSwitcher} from "../utils/utils";
 import {Container} from "react-bootstrap";
 import {FilterMatchMode} from "primereact/api"
-import {deleteMultipleReviews, fetchPageData} from "../http/reviewAPI";
+import {deleteMultipleReviews, deleteOneReview, fetchPageData} from "../http/reviewAPI";
 import {format} from "date-fns";
 import {IoTrashBinSharp} from "react-icons/io5";
 import {FiEdit2} from "react-icons/fi";
@@ -17,16 +17,8 @@ import {REVIEW_ROUTE, REVIEW_ROUTE_EDIT} from "../utils/consts";
 import {BsEyeFill} from "react-icons/bs";
 
 
-const UserPageReviews = ({themeMode, reviewsData,isAdmin, isYour, userId, toast, t}) => {
-
+const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast, t}) => {
     const navigate = useNavigate();
-    let emptyReview = {
-        id: null,
-        name: '',
-        score: 0,
-        rating: 0,
-        createdAt: ''
-    };
     const [reviews, setReviews] = useState(reviewsData);
     const [selectedReviews, setSelectedReviews] = useState(null);
     const [deleteReviewDialog, setDeleteReviewDialog] = useState(false);
@@ -88,12 +80,12 @@ const UserPageReviews = ({themeMode, reviewsData,isAdmin, isYour, userId, toast,
 
     const deleteSelectedReviews = async () => {
         const reviewsIds = []
-        let _reviews = reviews.filter((val) => {
-            if (selectedReviews.includes(val)) {
-                reviewsId.push(val.id)
-                return false
+        let _reviews = reviews.filter((review) => {
+            if (!selectedReviews.includes(review)) {
+                return true
             }
-        });
+            reviewsIds.push(review.id)
+        })
 
         setReviews(_reviews);
         setDeleteReviewsDialog(false);
@@ -106,35 +98,39 @@ const UserPageReviews = ({themeMode, reviewsData,isAdmin, isYour, userId, toast,
         navigate(REVIEW_ROUTE_EDIT + `/${rowData.id}`)
     }
 
-    const UserActions = (rowData) => {
+    const Types = (rowData) => {
         return (
-            <Container className={"d-flex gap-3"}>
-                <FiEdit2
-                    style={{fontSize: "1.5rem", cursor: "pointer"}}
-                    onClick={() => editReview(rowData)}
-                />
-                <IoTrashBinSharp
-                    style={{fontSize: "1.5rem", cursor: "pointer"}}
-                    onClick={() => confirmDeleteReview(rowData)}
-                />
-                <BsEyeFill
-                    style={{fontSize: "1.5rem", cursor: "pointer"}}
-                    onClick={() => navigateReview(rowData.id)}
-                />
-            </Container>
-        );
-    };
+            t(`${rowData.art_work.type}`)
+        )
+    }
 
-    const GuestActions = (rowData) => {
+    const TableActions = (rowData) => {
         return (
-            <Container className={"d-flex gap-3"}>
-                <BsEyeFill
-                    style={{fontSize: "1.5rem", cursor: "pointer"}}
-                    onClick={() => navigateReview(rowData.id)}
-                />
-            </Container>
+            isYour || isAdmin ? (
+                <Container className={"d-flex gap-3"}>
+                    <FiEdit2
+                        style={{fontSize: "1.5rem", cursor: "pointer"}}
+                        onClick={() => editReview(rowData)}
+                    />
+                    <IoTrashBinSharp
+                        style={{fontSize: "1.5rem", cursor: "pointer"}}
+                        onClick={() => confirmDeleteReview(rowData)}
+                    />
+                    <BsEyeFill
+                        style={{fontSize: "1.5rem", cursor: "pointer"}}
+                        onClick={() => navigateReview(rowData.id)}
+                    />
+                </Container>
+            ) : (
+                <Container className={"d-flex gap-3"}>
+                    <BsEyeFill
+                        style={{fontSize: "1.5rem", cursor: "pointer"}}
+                        onClick={() => navigateReview(rowData.id)}
+                    />
+                </Container>
+            )
         );
-    };
+    }
 
     return (
         <Container className="mt-5">
@@ -149,14 +145,17 @@ const UserPageReviews = ({themeMode, reviewsData,isAdmin, isYour, userId, toast,
                     t={t}
                 />}
                 paginator rows={15}
-                tableStyle={{minWidth: '100%'}}
                 sortField="id"
                 removableSort
                 sortOrder={1}
-                filters={filters} dataKey="id"
-                selection={selectedReviews}
-                onSelectionChange={(e) => setSelectedReviews(e.value)}
+                filters={filters}
                 selectionMode='checkbox'
+                selection={selectedReviews}
+                onSelectionChange={(e) => {
+                    setSelectedReviews(e.value)
+                }}
+                dataKey="id"
+                tableStyle={{minWidth: '100%'}}
             >
                 {isYour || isAdmin ?
                     (<Column selectionMode="multiple" headerStyle={{minWidth: '3rem%'}}></Column>)
@@ -165,14 +164,11 @@ const UserPageReviews = ({themeMode, reviewsData,isAdmin, isYour, userId, toast,
                 <Column field="id" header="#" sortable style={{minWidth: '3rem'}}></Column>
                 <Column field="name" header={t("Review Name")} sortable style={{minWidth: '12rem'}}></Column>
                 <Column field="art_work.name" header={t("Artwork Name")} sortable style={{minWidth: '14rem'}}></Column>
-                <Column field="art_work.type" header={t("Artwork Type")} sortable style={{minWidth: '7rem'}}></Column>
+                <Column field="art_work.type" header={t("Artwork Type")} body={Types} sortable style={{minWidth: '7rem'}}></Column>
                 <Column field="score" header={t("Score")} sortable style={{minWidth: '5rem'}}></Column>
                 <Column field="rating" header={t("Rating")} sortable style={{minWidth: '5rem'}}></Column>
                 <Column field="createdAt" header={t("Created")} sortable style={{minWidth: '8rem'}}></Column>
-                {isYour || isAdmin ?
-                    (<Column header={t("Actions")} body={UserActions} style={{minWidth: '9rem'}}></Column>)
-                    :
-                    (<Column header={t("Actions")} body={GuestActions} style={{minWidth: '9rem'}}></Column>)}
+                <Column header={t("Actions")} body={TableActions} style={{minWidth: '9rem'}}></Column>
             </DataTable>
 
             <DeleteReviewModal

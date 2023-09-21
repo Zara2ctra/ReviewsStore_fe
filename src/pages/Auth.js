@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {Card, Container} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, MAIN_ROUTE, } from "../utils/consts";
-import {login, registration} from "../http/userAPI";
+import {getOneUser, login, registration} from "../http/userAPI";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {useTranslation} from "react-i18next";
@@ -36,10 +36,10 @@ const Auth = observer(() => {
             } else {
                 data = await registration(formData.email, formData.password, formData.name);
             }
-            user.setId(data?.id);
+            user.setId(data[0]?.id);
+            user.setIsAdmin(data[1] === "ADMIN");
             user.setUser(user);
             user.setIsAuth(true);
-            console.log(data)
             navigate(MAIN_ROUTE);
         } catch (e) {
             console.log(e.response.data.message);
