@@ -6,10 +6,13 @@ import {BiLike, BiUserCircle} from "react-icons/bi";
 import {Context} from "../index";
 import {format} from "date-fns";
 
-const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler, themeMode, themeColors}) => {
+const ReviewPageInfo = ({
+                            reviewData, isSmallScreen,
+                            handleRating, toggleLikeHandler,
+                            themeMode, themeColors, navigateUserPage
+}) => {
     const {user} = useContext(Context)
     const {t} = useTranslation();
-    console.log(reviewData)
     const reviewCreatedDate = new Date(reviewData?.reviewInfo?.createdAt || new Date());
 
     return (
@@ -28,7 +31,7 @@ const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler,
                     border={themeMode}
                     width={300}
                     height={300}
-                    src={reviewData.reviewInfo.imageUrl}
+                    src={reviewData?.reviewInfo?.imageUrl}
                     thumbnail
                 />
                 <Stars
@@ -42,35 +45,29 @@ const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler,
                     {t(`${reviewData.artwork.type}`)}: <br/>
                     {reviewData.artwork.name}
                 </h2>
-                <div
-                    style={{
-                        display: "inline-flex",
-                        cursor: user.isAuth ? "pointer" : ""
-                    }}
-                    onClick={user.isAuth ?
-                        toggleLikeHandler
-                        :
-                        () => user.isAuth
-                    }
-                >
-                    <BiUserCircle style={{color: themeColors.text, fontSize: '3rem'}}/>
+                <div style={{display: "inline-flex"}}>
+                    <BiUserCircle
+                        style={{color: themeColors.text, fontSize: '3rem', cursor: "pointer"}}
+                        onClick={user.isAuth ?
+                            () => navigateUserPage(reviewData.userInfo.id)
+                            :
+                            () => user.isAuth
+                        }
+                    />
                     <span style={{fontSize: "1.5rem"}}>
                             {reviewData.userInfo.name}
-                        </span>
-                    {reviewData.likeStatus ? (
-                        <BiLike
-                            style={{
-                                color: "green",
-                            }}
-                        />
-                    ) : (
-                        <BiLike
-                            style={{
-                                color: themeColors.text,
-                            }}
-                        />
-                    )
-                    }
+                    </span>
+                    <BiLike
+                        onClick={user.isAuth ?
+                            toggleLikeHandler
+                            :
+                            () => user.isAuth
+                        }
+                        style={{
+                            color: reviewData.likeStatus ? "green" : themeColors.text,
+                            cursor: user.isAuth ? "pointer" : ""
+                        }}
+                    />
                     <span>
                             {reviewData.likesNumber}
                     </span> <br/>
@@ -81,4 +78,4 @@ const ReviewInfo = ({reviewData, isSmallScreen, handleRating, toggleLikeHandler,
     );
 };
 
-export default ReviewInfo;
+export default ReviewPageInfo;

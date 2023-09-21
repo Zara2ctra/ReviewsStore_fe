@@ -14,7 +14,6 @@ const UserActions = ({themeMode, themeColors, handleCreateReview, handleLogout, 
         >
             <NavDropdown.Item onClick={handleUserProfile}>{t('Profile')}</NavDropdown.Item>
             <NavDropdown.Item onClick={handleCreateReview}>{t('Add new review')}</NavDropdown.Item>
-            <NavDropdown.Item>{t('Some text')}</NavDropdown.Item>
             <NavDropdown.Divider/>
             <NavDropdown.Item onClick={handleLogout}>{t('Sign out')}</NavDropdown.Item>
         </NavDropdown>

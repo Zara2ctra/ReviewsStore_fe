@@ -39,6 +39,7 @@ const Auth = observer(() => {
             user.setId(data?.id);
             user.setUser(user);
             user.setIsAuth(true);
+            console.log(data)
             navigate(MAIN_ROUTE);
         } catch (e) {
             console.log(e.response.data.message);

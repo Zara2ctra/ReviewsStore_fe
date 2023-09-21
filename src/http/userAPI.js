@@ -14,7 +14,7 @@ export const login = async (email, password) => {
 }
 
 export const check = async () => {
-    try{
+    try {
         const {data} = await $authHost.get('api/user/auth')
         localStorage.setItem('token', data.token)
         return jwt_decode(data.token)
@@ -28,6 +28,11 @@ export const getAllUsers = async () => {
     return data
 }
 
+export const getOneUser = async (userId) => {
+    const {data} = await $host.get('api/user/' + userId)
+    return data
+}
+
 export const removeUser = async (id) => {
-    await $host.post('api/user/id', {id})
+    await $host.post('api/user/' + id)
 }

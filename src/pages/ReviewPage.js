@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import socketIO from 'socket.io-client';
 import useChat from "../hooks/useChat";
 import MDEditor from '@uiw/react-md-editor';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Container, ListGroup, Row} from "react-bootstrap";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
@@ -13,8 +13,8 @@ import CommentFooter from "../components/CommentFooter";
 import {fetchLikeStatus, fetchNumberLikes, toggleLike} from "../http/likeAPI";
 import Stars from "../components/Stars";
 import {changeRating, getReviewRating,} from "../http/ratingAPI";
-import ReviewInfo from "../components/ReviewInfo";
-import {format} from "date-fns";
+import ReviewPageInfo from "../components/ReviewPageInfo";
+import {USER_PROFILE_ROUTE} from "../utils/consts";
 
 const socket = socketIO.connect('https://reviews-storebe.onrender.com:10000');
 
@@ -32,6 +32,7 @@ const ReviewPage = observer(() => {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
 
     const {id} = useParams();
+    const navigate = useNavigate()
     const startChat = useChat(id);
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
@@ -62,6 +63,10 @@ const ReviewPage = observer(() => {
             window.removeEventListener('resize', handleResize);
         };
     }, [id])
+
+    const navigateUserPage = (id) => {
+        navigate(USER_PROFILE_ROUTE + `/${id}`)
+    }
 
     const toggleLikeHandler = async () => {
         await toggleLike(user.id, id);
@@ -100,11 +105,12 @@ const ReviewPage = observer(() => {
                 backgroundColor: themeColors.background
             }}
         >
-            <ReviewInfo
+            <ReviewPageInfo
                 reviewData={reviewData}
                 isSmallScreen={isSmallScreen}
                 handleRating={handleRating}
                 toggleLikeHandler={toggleLikeHandler}
+                navigateUserPage={navigateUserPage}
                 themeMode={themeMode}
                 themeColors={themeColors}
             />
@@ -130,8 +136,10 @@ const ReviewPage = observer(() => {
                 <ListGroup style={{background: themeColors.background, gap: "1rem"}}>
                     {startChat.comments.map((comment) => (
                         <CommentListItem
+                            navigateUserPage={navigateUserPage}
                             key={comment.id}
                             comment={comment}
+                            isAuth={user.isAuth}
                             handler={startChat.removeComment}
                         />
                     ))}

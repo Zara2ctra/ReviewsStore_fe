@@ -9,13 +9,22 @@ export const createReview = async (formData) => {
     return data.id;
 }
 
+export const editReview = async (formData, id) => {
+    const {data} = await $host.put('api/review' + `/${id}`, formData,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return data.id;
+}
+
 export const fetchReviews = async () => {
     const {data} = await $host.get('api/review')
     return data
 }
 
-export const fetchUsersReviews = async (userId) => {
-    const {data} = await $host.get('api/review/' + userId)
+export const fetchPageData = async (userId) => {
+    const {data} = await $host.get('api/review/user/' + userId)
     return data
 }
 
@@ -49,6 +58,10 @@ export const fetchOneReview = async (id) => {
     return data
 }
 
-export const deleteReview = async (id) => {
+export const deleteOneReview = async (id) => {
     await $host.delete('api/review/' + id)
+}
+
+export const deleteMultipleReviews = async (reviewsIds) => {
+    await $host.post('api/review/', {reviewsIds})
 }

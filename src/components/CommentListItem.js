@@ -6,7 +6,7 @@ import {format} from 'date-fns';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import {useTranslation} from "react-i18next";
 
-const CommentListItem = ({comment, handler}) => {
+const CommentListItem = ({comment, handler, navigateUserPage, isAuth}) => {
     const {user} = useContext(Context);
     const {t, i18n} = useTranslation();
     const isYourComment = comment.userId === user.id;
@@ -46,7 +46,11 @@ const CommentListItem = ({comment, handler}) => {
                 <Card.Header className={"d-flex justify-content-between g-3"}>
                     <Container style={{display: "flex", gap: "0.5rem"}}>
                         <BiUserCircle
-                            style={{color: themeColors.text, fontSize: '2rem'}}
+                            style={{color: themeColors.text, fontSize: '2rem', cursor: isAuth ? "pointer" : ""}}
+                            onClick={isAuth ?
+                                () => navigateUserPage(comment.user.id)
+                                :
+                                () => isAuth}
                         />
                         {comment.user.name}
                     </Container>

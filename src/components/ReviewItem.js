@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import ReviewItemTitle from "./ReviewItemTitle";
 import {fetchLikeStatus, fetchNumberLikes} from "../http/likeAPI";
 import {getReviewRating} from "../http/ratingAPI";
+import {CiImageOff} from "react-icons/ci";
 
 const ReviewItem = (({review}) => {
     const {user} = useContext(Context);
@@ -72,14 +73,18 @@ const ReviewItem = (({review}) => {
                 flexDirection: "column",
                 alignItems: "center"
             }}>
-                <Image
-                    style={{maxWidth: "10rem", maxHeight: "15rem"}}
-                    src={review.imageUrl}
-                    alt="review image"
-                    className={"m-1"}
-                    border={themeMode}
-                    rounded
-                />
+                {review.imageUrl ? (
+                    <Image
+                        style={{maxWidth: "10rem", maxHeight: "15rem"}}
+                        src={review.imageUrl}
+                        alt="review image"
+                        className={"m-1"}
+                        border={themeMode}
+                        rounded
+                    />
+                ) : (
+                    <CiImageOff style={{fontSize: "5rem"}}/>
+                )}
                 <Stars
                     rate={reviewInfo.rating.calculatedRate}
                     isAuth={false}
