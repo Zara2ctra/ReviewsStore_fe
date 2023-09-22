@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const $host = axios.create({
-    baseURL: "https://reviews-storebe.onrender.com/"
+    baseURL: process.env.REACT_APP_SERVER_URL_HTTP
 })
 
 const $authHost = axios.create({
-    baseURL: "https://reviews-storebe.onrender.com/"
+    baseURL: process.env.REACT_APP_SERVER_URL_HTTP
 })
 
 const authInterceptor = config => {

@@ -1,12 +1,15 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Card, Container} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE, MAIN_ROUTE, } from "../utils/consts";
-import {getOneUser, login, registration} from "../http/userAPI";
+import {LOGIN_ROUTE, MAIN_ROUTE,} from "../utils/consts";
+import {login, registration} from "../http/userAPI";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {useTranslation} from "react-i18next";
 import AuthForm from "../components/AuthForm";
+import {getAccessTokenGithub, getUserDataGithub, getUserDataGoogle} from "../http/authServicesApi";
+import {setUserAuth} from "../utils/utils";
+
 
 const Auth = observer(() => {
     const {user} = useContext(Context);
@@ -14,12 +17,15 @@ const Auth = observer(() => {
     const location = useLocation();
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE;
+
+    const loginWith = useRef(localStorage.getItem("loginWith"))
     const [formData, setFormData] = useState({
         email: "",
         password: "",
-        name: ""
+        name: "",
+        userDataGithub: [],
+        userDataGoogle: [],
     });
-
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
 
@@ -27,6 +33,48 @@ const Auth = observer(() => {
         const {name, value} = e.target;
         setFormData({...formData, [name]: value});
     };
+
+    useEffect(() => {
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString)
+        const codeParam = urlParams.get("code")
+
+        const accessToken = localStorage.getItem("accessToken");
+        if (codeParam && !accessToken && loginWith.current === "GitHub") {
+            getAccessTokenGithub(codeParam).then(resp => {
+                localStorage.setItem("accessToken", resp.access_token)
+                getUserDataGithub(resp.access_token).then((resp) => {
+                    setFormData({
+                        ...formData,
+                        userDataGithub: resp
+                    })
+                })
+            })
+        } else if (codeParam && accessToken && loginWith.current === "GitHub") {
+            getUserDataGithub(accessToken).then((resp) => {
+                localStorage.setItem("accessToken", accessToken)
+                setFormData({
+                    ...formData,
+                    userDataGithub: resp
+                })
+
+            })
+        }
+    }, [loginWith])
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken")
+
+        if (accessToken && loginWith.current === "Google") {
+            getUserDataGoogle(accessToken).then(resp => {
+                setFormData({
+                    ...formData,
+                    userDataGoogle: resp
+                })
+            })
+        }
+    }, [loginWith])
+
 
     const handleSubmit = async (event) => {
         try {
@@ -36,11 +84,7 @@ const Auth = observer(() => {
             } else {
                 data = await registration(formData.email, formData.password, formData.name);
             }
-            user.setId(data[0]?.id);
-            user.setIsAdmin(data[1] === "ADMIN");
-            user.setUser(user);
-            user.setIsAuth(true);
-            navigate(MAIN_ROUTE);
+            setUserAuth(user, data).then(() => navigate(MAIN_ROUTE))
         } catch (e) {
             console.log(e.response.data.message);
         }
@@ -73,6 +117,7 @@ const Auth = observer(() => {
                     handleSubmit={handleSubmit}
                     themeColors={themeColors}
                     themeMode={themeMode}
+                    navigate={navigate}
                 />
             </Card>
         </Container>

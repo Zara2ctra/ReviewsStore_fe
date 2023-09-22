@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
-const SERVER_URL = 'https://reviews-storebe.onrender.com'
+const SERVER_URL = process.env.REACT_APP_SERVER_URL_WS
 
 const useChat = (reviewId) => {
     const [comments, setComments] = useState([]);

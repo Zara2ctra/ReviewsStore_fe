@@ -2,7 +2,11 @@ import React from 'react';
 import {Button, Form, Row} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {useGoogleLogin} from "@react-oauth/google";
+import {AiFillGithub, AiFillGoogleCircle} from "react-icons/ai";
+
+const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
 
 const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, themeMode}) => {
     const {t} = useTranslation();
@@ -12,6 +16,19 @@ const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, t
             handleSubmit(event);
         }
     };
+
+    const loginToGithub = () => {
+        localStorage.setItem("loginWith", "GitHub")
+        window.location.assign(`https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`)
+    }
+
+
+    const loginToGoogle = useGoogleLogin({
+        onSuccess: tokenResponse => {
+            localStorage.setItem("loginWith", "Google")
+            localStorage.setItem("accessToken", tokenResponse.access_token)
+        },
+    })
 
     return (
         <Form className="d-flex flex-column" data-bs-theme={themeMode} onKeyPress={handleKeyPress}>
@@ -64,13 +81,27 @@ const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, t
                         </>
                     )}
                 </div>
-                <div>
+                <div style={{display: "contents"}}>
                     <Button
-                        className="mt-3"
+                        className="mt-3 ms-3"
                         onClick={handleSubmit}
                         variant={themeMode}
                     >
                         {isLogin ? t('Log in') : t('Sign up')}
+                    </Button>
+                    <Button
+                        className="mt-3 ms-3 d-flex"
+                        onClick={() => loginToGithub()}
+                        variant={themeMode}
+                    >
+                        <AiFillGithub style={{fontSize: "2rem"}}/> GitHub
+                    </Button>
+                    <Button
+                        className="mt-3 ms-3 d-flex"
+                        onClick={() => loginToGoogle()}
+                        variant={themeMode}
+                    >
+                        <AiFillGoogleCircle style={{fontSize: "2rem"}}/> Google
                     </Button>
                 </div>
             </Row>

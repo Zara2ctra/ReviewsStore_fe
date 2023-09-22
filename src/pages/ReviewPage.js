@@ -16,7 +16,7 @@ import {changeRating, getReviewRating,} from "../http/ratingAPI";
 import ReviewPageInfo from "../components/ReviewPageInfo";
 import {USER_PROFILE_ROUTE} from "../utils/consts";
 
-const socket = socketIO.connect('https://reviews-storebe.onrender.com');
+const socket = socketIO.connect(process.env.REACT_APP_WS_URL);
 
 const ReviewPage = observer(() => {
     const {t, i18n} = useTranslation();
