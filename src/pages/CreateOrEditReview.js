@@ -6,10 +6,11 @@ import {blankMarkDown, REVIEW_ROUTE} from "../utils/consts";
 import {createReview, editReview, fetchOneReview} from "../http/reviewAPI";
 import {useNavigate, useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {createArtWork} from "../http/artworkAPI";
+import {createOrGetArtWork} from "../http/artworkAPI";
 import {languageMappings} from "../i18n";
 import Alert404 from "../components/404";
 import CreateOrEditReviewInfo from "../components/CreateOrEditReviewInfo";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const CreateOrEditReview = observer(() => {
     const {t, i18n} = useTranslation();
@@ -25,6 +26,7 @@ const CreateOrEditReview = observer(() => {
     });
     const [validated, setValidated] = useState(false);
     const [nameError, setNameError] = useState('');
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate();
 
     const {id} = useParams()
@@ -48,7 +50,10 @@ const CreateOrEditReview = observer(() => {
 
     useEffect(() => {
         if (isEditMode) {
-            putReviewData(id)
+            setLoading(true)
+            putReviewData(id).then(() => setLoading(false))
+        } else {
+            setLoading(false)
         }
     }, [id])
 
@@ -74,7 +79,6 @@ const CreateOrEditReview = observer(() => {
     }
 
     const createFormData = (artworkId) => {
-        console.log(artworkId)
         const data = new FormData();
         data.append('name', formData.name);
         data.append('content_text', formData.text);
@@ -88,7 +92,7 @@ const CreateOrEditReview = observer(() => {
     const sendReview = async () => {
         const currentLanguage = i18n.language;
         const englishTypeValue = languageMappings[currentLanguage][formData?.artworkType];
-        const artwork = await createArtWork(formData.artworkName, englishTypeValue);
+        const artwork = await createOrGetArtWork(formData.artworkName, englishTypeValue);
         const finalData = createFormData(artwork.id)
         const currentReviewId = await createReview(finalData);
         navigate(REVIEW_ROUTE + "/" + currentReviewId);
@@ -97,7 +101,7 @@ const CreateOrEditReview = observer(() => {
     const changeReview = async () => {
         const currentLanguage = i18n.language;
         const englishTypeValue = languageMappings[currentLanguage][formData?.artworkType];
-        const artwork = await createArtWork(formData.artworkName, englishTypeValue);
+        const artwork = await createOrGetArtWork(formData.artworkName, englishTypeValue);
         const finalData = createFormData(artwork.id)
         const currentReviewId = await editReview(finalData, id);
         navigate(REVIEW_ROUTE + "/" + currentReviewId);
@@ -118,39 +122,29 @@ const CreateOrEditReview = observer(() => {
     };
 
     return (
+        loading ? <LoadingSpinner themeMode={themeMode}/>
+            :
         <Container
             className="mt-5"
             data-bs-theme={themeMode}
             style={{color: themeColors.text, backgroundColor: themeColors.background}}
         >
-            {isEditMode && !formData.isYouReview ?
-                <Alert404/> : isEditMode && formData.isYouReview ? (
-                    <CreateOrEditReviewInfo
-                        validated={validated}
-                        handleSubmit={handleSubmit}
-                        formData={formData}
-                        handleChange={handleChange}
-                        nameError={nameError}
-                        handleChangeFile={handleChangeFile}
-                        isEditMode={isEditMode}
-                        t={t}
-                        themeMode={themeMode}
-                        setFormData={setFormData}
-                    />
-                ) : (
-                    <CreateOrEditReviewInfo
-                        validated={validated}
-                        handleSubmit={handleSubmit}
-                        formData={formData}
-                        handleChange={handleChange}
-                        nameError={nameError}
-                        handleChangeFile={handleChangeFile}
-                        isEditMode={isEditMode}
-                        t={t}
-                        themeMode={themeMode}
-                        setFormData={setFormData}
-                    />
-                )}
+            {isEditMode && !formData.isYouReview ? (
+                <Alert404/>
+            ) : (
+                <CreateOrEditReviewInfo
+                    validated={validated}
+                    handleSubmit={handleSubmit}
+                    formData={formData}
+                    handleChange={handleChange}
+                    nameError={nameError}
+                    handleChangeFile={handleChangeFile}
+                    isEditMode={isEditMode}
+                    t={t}
+                    themeMode={themeMode}
+                    setFormData={setFormData}
+                />
+            )}
         </Container>
     );
 });

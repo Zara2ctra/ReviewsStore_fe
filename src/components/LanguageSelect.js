@@ -1,16 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {LANG} from "../utils/consts";
 import {Form} from "react-bootstrap";
-import {useTranslation} from "react-i18next";
-import {Context} from "../index";
 
-const LanguageSelect = () => {
-    const { t, i18n } = useTranslation();
-    const {user} = useContext(Context);
-    let themeMode = user.themeMode;
-
+const LanguageSelect = ({t, i18n, themeMode}) => {
     const handleChangeType = async (e) => {
-        const currentLang = e.target.value.toLowerCase().slice(0,2)
+        const currentLang = e.target.value.toLowerCase().slice(0, 2)
         await i18n.changeLanguage(currentLang);
         localStorage.setItem('lang', currentLang)
     }

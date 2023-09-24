@@ -67,6 +67,8 @@ const resources = {
             'Review id': 'Review id',
             'User info': 'User info',
             'name': 'name',
+            'Incorrect mail': 'Incorrect mail',
+            'Incorrect password': 'Incorrect password',
         }
     },
     fr: {
@@ -95,8 +97,8 @@ const resources = {
             'Enter your email address...': 'Entrez votre adresse e-mail...',
             'Enter your password...': 'Entrez votre mot de passe...',
             'Enter your name...': 'Entrez votre nom...',
-            'Sign up': 'S\'inscrire',
-            'Log in': 'Se connecter',
+            'Sign up': 'Registre',
+            'Log in': 'Login',
             'No account?': 'Pas de compte ?',
             'Got an account?': 'Vous avez un compte ?',
             "Search": "Recherche",
@@ -134,6 +136,8 @@ const resources = {
             'Review id': 'Revue id',
             'User info': 'Informations sur l\'utilisateur',
             'name': 'nom',
+            'Incorrect mail': 'Courrier incorrect',
+            'Incorrect password': 'Mot de passe incorrect',
         }
     },
     ру: {
@@ -162,7 +166,7 @@ const resources = {
             'Enter your email address...': 'Введите адрес электронной почты...',
             'Enter your password...': 'Введите пароль...',
             'Enter your name...': 'Введите свое имя...',
-            'Sign up': 'Зарегистрироваться',
+            'Sign up': 'Регистрация',
             'Log in': 'Войти',
             'No account?': 'Нет аккаунта?',
             'Got an account?': 'У вас есть аккаунт?',
@@ -201,6 +205,8 @@ const resources = {
             'Review id': 'ID обзора',
             'User info': 'Информация о пользователе',
             'name': 'имя',
+            'Incorrect mail': 'Неверная почта',
+            'Incorrect password': 'Неправильный пароль',
         }
     }
 };

@@ -47,7 +47,7 @@ const ReviewPageInfo = ({
                 </h2>
                 <div style={{display: "inline-flex"}}>
                     <BiUserCircle
-                        style={{color: themeColors.text, fontSize: '3rem', cursor: "pointer"}}
+                        style={{color: themeColors.text, fontSize: '3rem', cursor: user.isAuth ? "pointer" : ""}}
                         onClick={user.isAuth ?
                             () => navigateUserPage(reviewData.userInfo.id)
                             :

@@ -1,12 +1,8 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, Form} from "react-bootstrap";
 import {RiSendPlaneFill} from "react-icons/ri";
-import {Context} from "../index";
-import {useTranslation} from "react-i18next";
 
-const CommentFooter = ({sendComment, reviewId}) => {
-    const {user} = useContext(Context);
-    const {t, i18n} = useTranslation();
+const CommentFooter = ({sendComment, reviewId, t, user}) => {
     const [comment, setComment] = useState('');
     let themeMode = user.themeMode;
 

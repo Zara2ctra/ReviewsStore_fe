@@ -2,13 +2,18 @@ import {$authHost, $host} from "./index";
 import jwt_decode from "jwt-decode";
 
 export const registration = async (email, password, name) => {
-    const {data} = await $host.post('api/user/registration', {email, password, name})
-    localStorage.setItem('token', data.token)
-    return [jwt_decode(data.token), data.role]
+    try {
+        const {data} = await $host.post('api/user/registration', {email, password, name})
+        localStorage.setItem('token', data.token)
+        return [jwt_decode(data.token), data.role]
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 export const login = async (email, password) => {
     const {data} = await $host.post('api/user/login', {email, password})
+    console.log(data)
     localStorage.setItem('token', data.token)
     return [jwt_decode(data.token), data.role]
 }
@@ -23,9 +28,45 @@ export const check = async () => {
     }
 }
 
-export const getAllUsers = async () => {
-    const {data} = await $host.get('api/user/')
-    return data
+export const getAccessTokenGithub = async (code) => {
+    try {
+        const {data} = await $host.get(`api/github/accessToken?code=${code}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const getUserDataGithub = async (accessToken) => {
+    try {
+        const {data} = await $host.get(`api/github/userData?accessToken=${accessToken}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        localStorage.setItem('token', data.token)
+        return [jwt_decode(data.token), data.role]
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const getUserDataGoogle = async (accessToken) => {
+    try {
+        const {data} = await $host.get(`api/google/userData?accessToken=${accessToken}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        localStorage.setItem('token', data.token)
+        return [jwt_decode(data.token), data.role]
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 export const getOneUser = async (userId) => {

@@ -24,7 +24,6 @@ const Admin = observer(() => {
     const navigate = useNavigate();
     const {user} = useContext(Context);
     const [data, setData] = useState([]);
-    console.log(data)
     const [selectedReviews, setSelectedReviews] = useState(null);
     const [deleteReviewDialog, setDeleteReviewDialog] = useState(false);
     const [deleteReviewsDialog, setDeleteReviewsDialog] = useState(false);

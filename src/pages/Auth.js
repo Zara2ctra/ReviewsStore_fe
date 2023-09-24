@@ -2,12 +2,11 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Card, Container} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, MAIN_ROUTE,} from "../utils/consts";
-import {login, registration} from "../http/userAPI";
+import {getAccessTokenGithub, getUserDataGithub, getUserDataGoogle, login, registration} from "../http/userAPI";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {useTranslation} from "react-i18next";
 import AuthForm from "../components/AuthForm";
-import {getAccessTokenGithub, getUserDataGithub, getUserDataGoogle} from "../http/authServicesApi";
 import {setUserAuth} from "../utils/utils";
 
 
@@ -23,9 +22,10 @@ const Auth = observer(() => {
         email: "",
         password: "",
         name: "",
-        userDataGithub: [],
-        userDataGoogle: [],
+        err: "",
     });
+    const [showErr, setShowErr] = useState(false);
+
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
 
@@ -38,45 +38,38 @@ const Auth = observer(() => {
         const queryString = window.location.search
         const urlParams = new URLSearchParams(queryString)
         const codeParam = urlParams.get("code")
-
         const accessToken = localStorage.getItem("accessToken");
-        if (codeParam && !accessToken && loginWith.current === "GitHub") {
+
+        if (accessToken && loginWith.current === 'Google' && !user.id) {
+            getUserDataGoogle(accessToken).then(data => {
+                setUserAuth(user, data).then(() => {
+                        localStorage.removeItem("accessToken");
+                        navigate(MAIN_ROUTE);
+                })
+            })
+        }
+
+        if (codeParam && !accessToken && loginWith.current === "GitHub" && !user.id) {
             getAccessTokenGithub(codeParam).then(resp => {
-                localStorage.setItem("accessToken", resp.access_token)
-                getUserDataGithub(resp.access_token).then((resp) => {
-                    setFormData({
-                        ...formData,
-                        userDataGithub: resp
+                getUserDataGithub(resp.access_token).then((data) => {
+                    setUserAuth(user, data).then(() => {
+                        localStorage.removeItem("accessToken");
+                        navigate(MAIN_ROUTE);
                     })
                 })
             })
-        } else if (codeParam && accessToken && loginWith.current === "GitHub") {
-            getUserDataGithub(accessToken).then((resp) => {
-                localStorage.setItem("accessToken", accessToken)
-                setFormData({
-                    ...formData,
-                    userDataGithub: resp
-                })
-
-            })
-        }
-    }, [loginWith])
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken")
-
-        if (accessToken && loginWith.current === "Google") {
-            getUserDataGoogle(accessToken).then(resp => {
-                setFormData({
-                    ...formData,
-                    userDataGoogle: resp
+        } else if (codeParam && accessToken && loginWith.current === "GitHub" && !user.id) {
+            getUserDataGithub(accessToken).then((data) => {
+                setUserAuth(user, data).then(() => {
+                    localStorage.removeItem("accessToken");
+                    navigate(MAIN_ROUTE);
                 })
             })
         }
     }, [loginWith])
 
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async () => {
         try {
             let data;
             if (isLogin) {
@@ -84,9 +77,16 @@ const Auth = observer(() => {
             } else {
                 data = await registration(formData.email, formData.password, formData.name);
             }
-            setUserAuth(user, data).then(() => navigate(MAIN_ROUTE))
+            if (data) {
+                setUserAuth(user, data).then(() => navigate(MAIN_ROUTE))
+            }
         } catch (e) {
-            console.log(e.response.data.message);
+            const textErr = t(e.response.data.message)
+           setFormData({
+               ...formData,
+               err: textErr
+           });
+           setShowErr(true)
         }
     };
 
@@ -115,9 +115,12 @@ const Auth = observer(() => {
                     formData={formData}
                     handleChange={handleChange}
                     handleSubmit={handleSubmit}
+                    setShowErr={setShowErr}
+                    showErr={showErr}
                     themeColors={themeColors}
                     themeMode={themeMode}
                     navigate={navigate}
+                    t={t}
                 />
             </Card>
         </Container>

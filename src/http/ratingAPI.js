@@ -2,7 +2,6 @@ import {$host} from "./index";
 
 export const changeRating = async (rate, userId, reviewId) => {
     if (userId) {
-        console.log(rate)
         const {data} = await $host.post('api/rating', {rate, userId, reviewId});
         return data;
     }

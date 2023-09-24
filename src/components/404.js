@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {Context} from "../index";
 import Alert from 'react-bootstrap/Alert';
 import {useNavigate} from "react-router-dom";
@@ -8,7 +8,7 @@ import {MAIN_ROUTE} from "../utils/consts";
 import {Button, Container} from "react-bootstrap";
 
 const Alert404 = observer(() => {
-    const { t, i18n } = useTranslation();
+    const {t} = useTranslation();
     const {user} = useContext(Context);
     const themeMode = user.themeMode
     const themeColors = user.themeColors;

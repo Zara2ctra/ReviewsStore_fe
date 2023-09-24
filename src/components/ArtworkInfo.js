@@ -15,13 +15,8 @@ const ArtworkInfo = ({handleChange, formData, nameError, t, handleChangeFile, is
                                 className={"mb-3 ms-4"}
                                 required
                             >
-                                <option
-                                    value=""
-                                    disabled
-                                    selected
-                                    hidden
-                                >
-                                    <option>{t(`${formData.artworkType}`)}</option>
+                                <option value="" disabled selected hidden>
+                                    {t(`${formData.artworkType}`)}
                                 </option>
                                 {TYPES_EN.map((type) => {
                                     return (
@@ -36,12 +31,7 @@ const ArtworkInfo = ({handleChange, formData, nameError, t, handleChangeFile, is
                                 className={"mb-3 ms-4"}
                                 required
                             >
-                                <option
-                                    value=""
-                                    disabled
-                                    selected
-                                    hidden
-                                >
+                                <option value="" disabled selected hidden>
                                     {t('Choose the type of artwork')}
                                 </option>
                                 {TYPES_EN.map((type) => {

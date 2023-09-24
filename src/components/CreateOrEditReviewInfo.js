@@ -3,8 +3,7 @@ import ArtworkInfo from "./ArtworkInfo";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import MDEditor from "@uiw/react-md-editor";
 
-const CreateOrEditReviewInfo = ({
-                                validated, handleSubmit, formData,
+const CreateOrEditReviewInfo = ({validated, handleSubmit, formData,
                                 handleChange, nameError, handleChangeFile,
                                 isEditMode, t, themeMode, setFormData
                             }) => {

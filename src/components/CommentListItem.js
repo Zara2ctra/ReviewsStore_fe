@@ -1,16 +1,11 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {Card, Container, ListGroup} from "react-bootstrap";
 import {BiUserCircle} from "react-icons/bi";
-import {Context} from "../index";
 import {format} from 'date-fns';
 import {AiOutlineCloseCircle} from "react-icons/ai";
-import {useTranslation} from "react-i18next";
 
-const CommentListItem = ({comment, handler, navigateUserPage, isAuth, isAdmin}) => {
-    const {user} = useContext(Context);
-    const {t, i18n} = useTranslation();
+const CommentListItem = ({comment, handler, navigateUserPage, isAuth, isAdmin, t, user, themeColors}) => {
     const isYourComment = comment.userId === user.id;
-    let themeColors = user.themeColors;
 
     const formatDate = (diffInMinutes, date) => {
         if (diffInMinutes < 1) {

@@ -1,16 +1,13 @@
 import React from 'react';
-import {Button, Form, Row} from "react-bootstrap";
+import {Button, Form, Row, Toast} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
-import {useTranslation} from "react-i18next";
-import {LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import {useGoogleLogin} from "@react-oauth/google";
 import {AiFillGithub, AiFillGoogleCircle} from "react-icons/ai";
 
 const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
 
-const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, themeMode}) => {
-    const {t} = useTranslation();
-
+const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, themeMode, showErr, setShowErr, t}) => {
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleSubmit(event);
@@ -18,16 +15,21 @@ const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, t
     };
 
     const loginToGithub = () => {
+        localStorage.removeItem("token")
         localStorage.setItem("loginWith", "GitHub")
         window.location.assign(`https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`)
     }
 
-
     const loginToGoogle = useGoogleLogin({
         onSuccess: tokenResponse => {
+            localStorage.removeItem("token")
             localStorage.setItem("loginWith", "Google")
             localStorage.setItem("accessToken", tokenResponse.access_token)
+            window.location.reload()
         },
+        onError: errorResponse => {
+            console.log(errorResponse)
+        }
     })
 
     return (
@@ -63,7 +65,7 @@ const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, t
                     />
                 </Form.Group>
             )}
-            <Row className="d-flex justify-content-between mt-3" style={{width: "70%"}}>
+            <Row className="d-flex justify-content-between mt-3" style={{width: "100%"}}>
                 <div>
                     {isLogin ? (
                         <>
@@ -82,6 +84,11 @@ const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, t
                     )}
                 </div>
                 <div style={{display: "contents"}}>
+                    <Toast onClose={() => setShowErr(false)} show={showErr} delay={2000} autohide bg={themeMode}>
+                        <Toast.Header>
+                            <strong className="me-auto">{formData.err}</strong>
+                        </Toast.Header>
+                    </Toast>
                     <Button
                         className="mt-3 ms-3"
                         onClick={handleSubmit}

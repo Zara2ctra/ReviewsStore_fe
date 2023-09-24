@@ -76,14 +76,14 @@ const NavBar = observer(() => {
                             t={t}
                         />
                     )}
-                    <ThemeToggle isDarkMode={isDarkMode} handleThemeToggle={handleThemeToggle}/>
+                    <ThemeToggle isDarkMode={isDarkMode} themeColors={themeColors} handleThemeToggle={handleThemeToggle}/>
                     <Form>
-                        <LanguageSelect/>
+                        <LanguageSelect t={t} i18n={i18n} themeMode={themeMode}/>
                     </Form>
                 </Container>
             </Navbar>
             <Container>
-                <Types themeMode={themeMode}/>
+                <Types themeMode={themeMode} user={user} t={t} handleNavigation={handleNavigation}/>
             </Container>
         </Container>
     )

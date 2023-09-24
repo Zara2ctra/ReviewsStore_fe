@@ -11,7 +11,7 @@ const ShowMoreButton = ({actions, themeMode, showAll, isShow}) => {
                 variant={themeMode}
                 onClick={() => actions(showAll)}
             >
-                <MdExpandMore/>
+                <MdExpandMore style={{fontSize: "2rem"}}/>
             </Button>
         ) : (
             <></>

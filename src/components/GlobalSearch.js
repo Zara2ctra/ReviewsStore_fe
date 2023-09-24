@@ -2,25 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {Button, Form, OverlayTrigger, Popover} from "react-bootstrap";
 import {BiSearchAlt} from "react-icons/bi";
 import {fetchReviewsByQuery} from "../http/reviewAPI";
-import {useTranslation} from "react-i18next";
 import {REVIEW_ROUTE} from "../utils/consts";
 
-const GlobalSearch = ({themeMode, navigate}) => {
-    const {t} = useTranslation();
-
+const GlobalSearch = ({themeMode, navigate, t}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    const searchReviews = async () => {
+        const data = await fetchReviewsByQuery(searchQuery);
+        setSearchResults(data);
+
+        if(data.length === 0) {
+            setSearchResults([{art_work: {name: t("Not found"), type: ""}, id: 1}])
+        }
+    };
+
     useEffect(() => {
-        const searchReviews = async () => {
-            const data = await fetchReviewsByQuery(searchQuery);
-            setSearchResults(data);
-
-            if(data.length === 0) {
-                setSearchResults([{art_work: {name: t("Not found"), type: ""}, id: 1}])
-            }
-        };
-
         searchReviews();
     }, [searchQuery]);
 

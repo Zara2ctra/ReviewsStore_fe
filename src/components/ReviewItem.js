@@ -1,19 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Card, Container, Image} from "react-bootstrap";
 import Stars from "./Stars";
 import {useNavigate} from "react-router-dom";
 import {REVIEW_ROUTE} from "../utils/consts";
 import MDEditor from "@uiw/react-md-editor";
-import {Context} from "../index";
-import {useTranslation} from "react-i18next";
 import ReviewItemTitle from "./ReviewItemTitle";
 import {fetchLikeStatus, fetchNumberLikes} from "../http/likeAPI";
 import {getReviewRating} from "../http/ratingAPI";
 import {CiImageOff} from "react-icons/ci";
 
-const ReviewItem = (({review}) => {
-    const {user} = useContext(Context);
-    const {t, i18n} = useTranslation();
+const ReviewItem = ({review, t, user, themeMode, themeColors}) => {
     const navigate = useNavigate();
     const [reviewInfo, setReviewInfo] = useState({
         likeStatus: false,
@@ -21,9 +17,6 @@ const ReviewItem = (({review}) => {
         rating: 0,
     });
     const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-    let themeColors = user.themeColors;
-    let themeMode = user.themeMode;
 
     const handleClickAuthorization = (id) => {
         navigate(REVIEW_ROUTE + `/${id}`);
@@ -96,7 +89,10 @@ const ReviewItem = (({review}) => {
                     data-bs-theme={themeMode}
                     data-color-mode={themeMode}
                 >
-                    <Card.Body>
+                    <Card.Body style={{
+                        maxHeight: "400px",
+                        overflow: "hidden",
+                    }}>
                         <ReviewItemTitle
                             t={t}
                             review={review}
@@ -114,19 +110,27 @@ const ReviewItem = (({review}) => {
                     <div
                         style={{
                             position: "absolute",
-                            bottom: "0",
-                            left: "0",
-                            width: "100%",
+                            bottom: "-2px",
+                            left: "-2px",
+                            width: "100.5%",
                             height: "70px",
-                            background: `linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5))`,
-                            backdropFilter: "blur(10px)",
-                            borderRadius: "0 0 10px 10px",
+                            overflow: "hidden",
                         }}
-                    ></div>
+                    >
+                        <div
+                            style={{
+                                height: "100%",
+                                background: `linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))`,
+                                backdropFilter: "blur(10px)",
+                                borderRadius: "0 0 5px 5px",
+                                animation: "fade 1s ease-in-out infinite",
+                            }}
+                        ></div>
+                    </div>
                 </Card>
             </Container>
         </div>
     )
-});
+};
 
 export default ReviewItem;

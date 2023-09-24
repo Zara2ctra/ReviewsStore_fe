@@ -4,8 +4,7 @@ import {Dialog} from "primereact/dialog";
 import {Container} from "react-bootstrap";
 import {Button} from "primereact/button";
 
-const DeleteReviewsModal = ({t, deleteReviewsDialog, hideDeleteReviewsDialog, review, deleteSelectedReviews}) => {
-
+const DeleteReviewsModal = ({deleteReviewsDialog, hideDeleteReviewsDialog, review, deleteSelectedReviews, t}) => {
     const deleteReviewsDialogFooter = (
         <Container>
             <Button label={t("No")} outlined onClick={hideDeleteReviewsDialog}/>

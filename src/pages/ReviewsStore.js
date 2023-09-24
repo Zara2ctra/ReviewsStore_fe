@@ -25,6 +25,9 @@ const ReviewsStore = observer(() => {
 
     const isTypePage = !!type;
 
+    let themeColors = user.themeColors;
+    let themeMode = user.themeMode;
+
     const fetchData = async (type) => {
         const recentReviews = isTypePage ? await fetchTypeRecentReviews(type) : await fetchRecentReviews();
         const popularReviews = isTypePage ? await fetchTypePopularReviews(type) : await fetchPopularReviews();
@@ -57,14 +60,20 @@ const ReviewsStore = observer(() => {
                 reviews={reviews.popularReviews}
                 showAll={showAllPopularReviews}
                 showMore={() => showMoreReviews('showAllPopularReviews')}
-                themeMode={user.themeMode}
+                t={t}
+                themeColors={themeColors}
+                themeMode={themeMode}
+                user={user}
             />
             <h2 style={{margin: '40px'}}>{t('Recent reviews')}</h2>
             <ReviewList
                 reviews={reviews.recentReviews}
                 showAll={showAllRecentReviews}
                 showMore={() => showMoreReviews('showAllRecentReviews')}
-                themeMode={user.themeMode}
+                t={t}
+                themeColors={themeColors}
+                themeMode={themeMode}
+                user={user}
             />
         </Container>
     );

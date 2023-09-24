@@ -3,7 +3,6 @@ import {Container} from "react-bootstrap";
 import {BiUserCircle} from "react-icons/bi";
 
 const UserPageHeader = ({themeMode, themeColors, userData, reviewNumber, likesNumber, t}) => {
-
     return (
         <Container
             className={`mt-5 d-flex justify-content-between gap-3`}

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import socketIO from 'socket.io-client';
 import useChat from "../hooks/useChat";
 import MDEditor from '@uiw/react-md-editor';
 import {useNavigate, useParams} from "react-router-dom";
@@ -16,10 +15,8 @@ import {changeRating, getReviewRating,} from "../http/ratingAPI";
 import ReviewPageInfo from "../components/ReviewPageInfo";
 import {USER_PROFILE_ROUTE} from "../utils/consts";
 
-const socket = socketIO.connect(process.env.REACT_APP_WS_URL);
-
 const ReviewPage = observer(() => {
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const {user} = useContext(Context);
     const [reviewData, setReviewData] = useState({
         reviewInfo: "",
@@ -34,8 +31,12 @@ const ReviewPage = observer(() => {
     const {id} = useParams();
     const navigate = useNavigate()
     const startChat = useChat(id);
+
     let themeColors = user.themeColors;
     let themeMode = user.themeMode;
+
+    const isAuth = user.isAuth;
+    const isAdmin = user.isAdmin;
 
     const fetchData = async () => {
         const reviewData = await fetchOneReview(id);
@@ -125,10 +126,10 @@ const ReviewPage = observer(() => {
                 </h1>
                 <MDEditor.Markdown
                     style={{padding: "20px"}}
-                    source={reviewData.reviewInfo.content_text}
+                    source={reviewData.reviewInfo?.content_text}
                 />
-                {user.isAuth ? (
-                    <Stars handler={handleRating} isAuth={user.isAuth}/>
+                {isAuth ? (
+                    <Stars handler={handleRating} isAuth={isAuth}/>
                 ) : (<></>)}
             </Row>
             <Row className="d-flex flex-column m-3">
@@ -138,16 +139,24 @@ const ReviewPage = observer(() => {
                 <ListGroup style={{background: themeColors.background, gap: "1rem"}}>
                     {startChat.comments.map((comment) => (
                         <CommentListItem
+                            themeColors={themeColors}
                             navigateUserPage={navigateUserPage}
                             key={comment.id}
+                            user={user}
                             comment={comment}
-                            isAuth={user.isAuth}
-                            isAdmin={user.isAdmin}
+                            isAuth={isAuth}
+                            isAdmin={isAdmin}
                             handler={startChat.removeComment}
+                            t={t}
                         />
                     ))}
                 </ListGroup>
-                <CommentFooter sendComment={startChat.sendComment} reviewId={id}/>
+                <CommentFooter
+                    sendComment={startChat.sendComment}
+                    reviewId={id}
+                    t={t}
+                    user={user}
+                />
             </Row>
         </Container>
     );
