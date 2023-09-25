@@ -47,7 +47,7 @@ const UserPage = observer(() => {
     }, [id])
 
     return (
-        <Container>
+        <Container style={{marginBottom: "2rem"}}>
             <Toast ref={toast}/>
             <UserPageHeader
                 themeMode={themeMode}

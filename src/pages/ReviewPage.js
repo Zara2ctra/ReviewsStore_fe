@@ -103,7 +103,7 @@ const ReviewPage = observer(() => {
             data-bs-theme={themeMode}
             style={{
                 color: themeColors.text,
-                backgroundColor: themeColors.background
+                backgroundColor: themeColors.background,
             }}
         >
             <ReviewPageInfo

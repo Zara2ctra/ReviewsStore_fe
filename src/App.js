@@ -9,7 +9,6 @@ import NavBar from "./components/NavBar.js";
 import LoadingSpinner from "./components/LoadingSpinner";
 import {setBodyBackgroundColor, setUserAuth} from "./utils/utils";
 import {GoogleOAuthProvider} from "@react-oauth/google";
-import Footer from "./components/Footer";
 
 const App = observer(() => {
     const {user} = useContext(Context);
@@ -35,7 +34,6 @@ const App = observer(() => {
             <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
                 <NavBar/>
                 {loading ? <LoadingSpinner themeMode={themeMode}/> : <AppRouter/>}
-                <Footer/>
             </GoogleOAuthProvider>
         </BrowserRouter>
     );

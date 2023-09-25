@@ -5,7 +5,7 @@ import ShowMoreButton from '../components/ShowMoreButton';
 
 const ReviewList = ({ reviews, showAll, showMore, themeMode, t, user, themeColors}) => {
     return (
-        <Container style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <Container style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: "3rem" }}>
             {showAll ? (
                 reviews.map((review) => (
                     <ReviewItem

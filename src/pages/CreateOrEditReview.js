@@ -125,7 +125,7 @@ const CreateOrEditReview = observer(() => {
         loading ? <LoadingSpinner themeMode={themeMode}/>
             :
         <Container
-            className="mt-5"
+            className="mt-5 mb-5"
             data-bs-theme={themeMode}
             style={{color: themeColors.text, backgroundColor: themeColors.background}}
         >
