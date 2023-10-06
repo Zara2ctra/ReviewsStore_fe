@@ -60,7 +60,6 @@ const ReviewsStore = observer(() => {
                 reviews={reviews.popularReviews}
                 showAll={showAllPopularReviews}
                 showMore={() => showMoreReviews('showAllPopularReviews')}
-                t={t}
                 themeColors={themeColors}
                 themeMode={themeMode}
                 user={user}
@@ -70,7 +69,6 @@ const ReviewsStore = observer(() => {
                 reviews={reviews.recentReviews}
                 showAll={showAllRecentReviews}
                 showMore={() => showMoreReviews('showAllRecentReviews')}
-                t={t}
                 themeColors={themeColors}
                 themeMode={themeMode}
                 user={user}

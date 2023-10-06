@@ -2,8 +2,10 @@ import React from 'react';
 import {BsExclamationTriangle} from "react-icons/bs";
 import {Dialog} from "primereact/dialog";
 import {Button} from "primereact/button";
+import {useTranslation} from "react-i18next";
 
-const DeleteReviewModal = ({deleteReviewDialog, hideDeleteReviewDialog, review, t, deleteReview}) => {
+const DeleteReviewModal = ({deleteReviewDialog, hideDeleteReviewDialog, review, deleteReview}) => {
+    const {t} = useTranslation();
 
     const deleteReviewDialogFooter = (
         <React.Fragment>

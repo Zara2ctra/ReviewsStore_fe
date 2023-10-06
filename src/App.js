@@ -12,7 +12,7 @@ import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const App = observer(() => {
     const {user} = useContext(Context);
-    const {t, i18n} = useTranslation();
+    const {i18n} = useTranslation();
     const [loading, setLoading] = useState(true)
     const themeMode = user.themeMode
 
@@ -20,13 +20,16 @@ const App = observer(() => {
         setBodyBackgroundColor(themeMode);
     }, [themeMode]);
 
-    useEffect(() => {
-        check()
-            .then(async (data) => {
-                await i18n.changeLanguage(localStorage.getItem("lang"));
-                setUserAuth(user, data);
-            })
-            .finally(() => setLoading(false));
+    useEffect(async () => {
+        try {
+            const data = await check();
+            await i18n.changeLanguage(localStorage.getItem("lang"));
+            setUserAuth(user, data);
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
     return (

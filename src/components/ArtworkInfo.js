@@ -1,8 +1,11 @@
 import React from 'react';
 import {Col, Form, Row} from "react-bootstrap";
 import {TYPES_EN} from "../utils/consts";
+import {useTranslation} from "react-i18next";
 
-const ArtworkInfo = ({handleChange, formData, nameError, t, handleChangeFile, isEditMode}) => {
+const ArtworkInfo = ({handleChange, formData, nameError, handleChangeFile, isEditMode}) => {
+    const {t} = useTranslation();
+
     return (
         <Row style={{flexDirection: "column"}}>
             <Col md={4}>

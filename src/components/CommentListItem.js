@@ -3,8 +3,11 @@ import {Card, Container, ListGroup} from "react-bootstrap";
 import {BiUserCircle} from "react-icons/bi";
 import {format} from 'date-fns';
 import {AiOutlineCloseCircle} from "react-icons/ai";
+import {useTranslation} from "react-i18next";
 
-const CommentListItem = ({comment, handler, navigateUserPage, isAuth, isAdmin, t, user, themeColors}) => {
+const CommentListItem = ({comment, handler, navigateUserPage, isAuth, isAdmin, user, themeColors}) => {
+    const {t} = useTranslation();
+
     const isYourComment = comment.userId === user.id;
 
     const formatDate = (diffInMinutes, date) => {

@@ -3,8 +3,10 @@ import {Button, Form, OverlayTrigger, Popover} from "react-bootstrap";
 import {BiSearchAlt} from "react-icons/bi";
 import {fetchReviewsByQuery} from "../http/reviewAPI";
 import {REVIEW_ROUTE} from "../utils/consts";
+import {useTranslation} from "react-i18next";
 
-const GlobalSearch = ({themeMode, navigate, t}) => {
+const GlobalSearch = ({themeMode, navigate}) => {
+    const {t} = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 

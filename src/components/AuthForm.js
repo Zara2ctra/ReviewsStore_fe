@@ -4,10 +4,13 @@ import {NavLink} from "react-router-dom";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
 import {useGoogleLogin} from "@react-oauth/google";
 import {AiFillGithub, AiFillGoogleCircle} from "react-icons/ai";
+import {useTranslation} from "react-i18next";
 
 const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
 
-const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, themeMode, showErr, setShowErr, t}) => {
+const AuthForm = ({isLogin, formData, handleChange, handleSubmit, themeColors, themeMode, showErr, setShowErr}) => {
+    const {t} = useTranslation();
+
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleSubmit(event);

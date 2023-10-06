@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import ReviewItem from '../components/ReviewItem';
 import ShowMoreButton from '../components/ShowMoreButton';
 
-const ReviewList = ({ reviews, showAll, showMore, themeMode, t, user, themeColors}) => {
+const ReviewList = ({ reviews, showAll, showMore, themeMode, user, themeColors}) => {
     return (
         <Container style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: "3rem" }}>
             {showAll ? (
@@ -11,7 +11,6 @@ const ReviewList = ({ reviews, showAll, showMore, themeMode, t, user, themeColor
                     <ReviewItem
                         key={review.createdAt}
                         review={review}
-                        t={t}
                         themeColors={themeColors}
                         themeMode={themeMode}
                         user={user}
@@ -22,7 +21,6 @@ const ReviewList = ({ reviews, showAll, showMore, themeMode, t, user, themeColor
                     <ReviewItem
                         key={review.createdAt}
                         review={review}
-                        t={t}
                         themeColors={themeColors}
                         themeMode={themeMode}
                         user={user}

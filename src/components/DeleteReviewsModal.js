@@ -3,8 +3,11 @@ import {BsExclamationTriangle} from "react-icons/bs";
 import {Dialog} from "primereact/dialog";
 import {Container} from "react-bootstrap";
 import {Button} from "primereact/button";
+import {useTranslation} from "react-i18next";
 
-const DeleteReviewsModal = ({deleteReviewsDialog, hideDeleteReviewsDialog, review, deleteSelectedReviews, t}) => {
+const DeleteReviewsModal = ({deleteReviewsDialog, hideDeleteReviewsDialog, review, deleteSelectedReviews}) => {
+    const {t} = useTranslation();
+
     const deleteReviewsDialogFooter = (
         <Container>
             <Button label={t("No")} outlined onClick={hideDeleteReviewsDialog}/>

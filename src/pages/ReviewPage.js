@@ -147,14 +147,12 @@ const ReviewPage = observer(() => {
                             isAuth={isAuth}
                             isAdmin={isAdmin}
                             handler={startChat.removeComment}
-                            t={t}
                         />
                     ))}
                 </ListGroup>
                 <CommentFooter
                     sendComment={startChat.sendComment}
                     reviewId={id}
-                    t={t}
                     user={user}
                 />
             </Row>

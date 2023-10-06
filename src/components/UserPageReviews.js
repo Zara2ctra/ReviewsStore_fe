@@ -15,10 +15,12 @@ import TableHeader from "./TableHeader";
 import {useNavigate} from "react-router-dom";
 import {REVIEW_ROUTE, REVIEW_ROUTE_EDIT} from "../utils/consts";
 import {BsEyeFill} from "react-icons/bs";
+import {useTranslation} from "react-i18next";
 
 
-const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast, t}) => {
+const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast}) => {
     const navigate = useNavigate();
+    const {t} = useTranslation();
     const [reviews, setReviews] = useState(reviewsData);
     const [selectedReviews, setSelectedReviews] = useState(null);
     const [deleteReviewDialog, setDeleteReviewDialog] = useState(false);
@@ -142,7 +144,6 @@ const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast
                     isAdmin={isAdmin}
                     confirmDeleteSelected={confirmDeleteSelected}
                     selectedReviews={selectedReviews}
-                    t={t}
                 />}
                 paginator rows={15}
                 sortField="id"
@@ -176,7 +177,6 @@ const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast
                 deleteReview={deleteReview}
                 hideDeleteReviewDialog={hideDeleteReviewDialog}
                 review={review}
-                t={t}
             />
 
             <DeleteReviewsModal
@@ -184,7 +184,6 @@ const UserPageReviews = ({themeMode, reviewsData, isAdmin, isYour, userId, toast
                 deleteSelectedReviews={deleteSelectedReviews}
                 hideDeleteReviewsDialog={hideDeleteReviewsDialog}
                 review={review}
-                t={t}
             />
         </Container>
     );

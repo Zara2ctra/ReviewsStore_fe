@@ -3,9 +3,9 @@ import ArtworkInfo from "./ArtworkInfo";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import MDEditor from "@uiw/react-md-editor";
 
-const CreateOrEditReviewInfo = ({validated, handleSubmit, formData,
+const ManipulateReviewInfo = ({validated, handleSubmit, formData,
                                 handleChange, nameError, handleChangeFile,
-                                isEditMode, t, themeMode, setFormData
+                                isEditMode, themeMode, setFormData
                             }) => {
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -15,7 +15,6 @@ const CreateOrEditReviewInfo = ({validated, handleSubmit, formData,
                 nameError={nameError}
                 handleChangeFile={handleChangeFile}
                 isEditMode={isEditMode}
-                t={t}
             />
             <Row className="m-3">
                 <Form.Group as={Col} md="6" style={{padding: "0 0  0 7px"}} controlId="validationCustom04">
@@ -78,4 +77,4 @@ const CreateOrEditReviewInfo = ({validated, handleSubmit, formData,
     );
 };
 
-export default CreateOrEditReviewInfo;
+export default ManipulateReviewInfo;

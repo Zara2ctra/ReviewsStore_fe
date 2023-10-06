@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {Button, Form} from "react-bootstrap";
 import {RiSendPlaneFill} from "react-icons/ri";
+import {useTranslation} from "react-i18next";
 
-const CommentFooter = ({sendComment, reviewId, t, user}) => {
+const CommentFooter = ({sendComment, reviewId, user}) => {
+    const {t} = useTranslation();
     const [comment, setComment] = useState('');
     let themeMode = user.themeMode;
 

@@ -8,7 +8,7 @@ import {
 import ReviewsStore from "./pages/ReviewsStore";
 import Auth from "./pages/Auth";
 import ReviewPage from "./pages/ReviewPage";
-import CreateOrEditReview from "./pages/CreateOrEditReview";
+import ReviewManipulator from "./pages/ReviewManipulator";
 import UserPage from "./pages/UserPage";
 import Admin from "./pages/Admin";
 
@@ -27,7 +27,7 @@ export const authRoutes = [
     },
     {
         path: REVIEW_CREATE_ROUTE,
-        Component: CreateOrEditReview
+        Component: ReviewManipulator
     },
     {
         path: USER_PROFILE_ROUTE + '/:id',
@@ -35,7 +35,7 @@ export const authRoutes = [
     },
     {
         path: REVIEW_ROUTE_EDIT + '/:id',
-        Component: CreateOrEditReview
+        Component: ReviewManipulator
     }
 ]
 

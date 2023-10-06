@@ -40,32 +40,33 @@ const Auth = observer(() => {
         const codeParam = urlParams.get("code")
         const accessToken = localStorage.getItem("accessToken");
 
-        if (accessToken && loginWith.current === 'Google' && !user.id) {
-            getUserDataGoogle(accessToken).then(data => {
-                setUserAuth(user, data).then(() => {
-                        localStorage.removeItem("accessToken");
-                        navigate(MAIN_ROUTE);
-                })
-            })
+        async function fetchGithubData() {
+            if (codeParam && loginWith.current === "GitHub" && !user.id) {
+                let data;
+
+                if (accessToken) {
+                    data = await getUserDataGithub(accessToken);
+                } else {
+                    const resp = await getAccessTokenGithub(codeParam);
+                    data = await getUserDataGithub(resp.access_token);
+                }
+
+                await setUserAuth(user, data);
+                localStorage.removeItem("accessToken");
+                navigate(MAIN_ROUTE);
+            }
         }
 
-        if (codeParam && !accessToken && loginWith.current === "GitHub" && !user.id) {
-            getAccessTokenGithub(codeParam).then(resp => {
-                getUserDataGithub(resp.access_token).then((data) => {
-                    setUserAuth(user, data).then(() => {
-                        localStorage.removeItem("accessToken");
-                        navigate(MAIN_ROUTE);
-                    })
-                })
-            })
-        } else if (codeParam && accessToken && loginWith.current === "GitHub" && !user.id) {
-            getUserDataGithub(accessToken).then((data) => {
-                setUserAuth(user, data).then(() => {
-                    localStorage.removeItem("accessToken");
-                    navigate(MAIN_ROUTE);
-                })
-            })
+        async function fetchGoogleData() {
+            if (accessToken && loginWith.current === 'Google' && !user.id) {
+                const data = await getUserDataGoogle(accessToken);
+                await setUserAuth(user, data);
+                localStorage.removeItem("accessToken");
+                navigate(MAIN_ROUTE);
+            }
         }
+
+        codeParam ? fetchGithubData() : fetchGoogleData()
     }, [loginWith])
 
 
@@ -120,7 +121,6 @@ const Auth = observer(() => {
                     themeColors={themeColors}
                     themeMode={themeMode}
                     navigate={navigate}
-                    t={t}
                 />
             </Card>
         </Container>

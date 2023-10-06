@@ -13,7 +13,7 @@ import {Container} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 
 const UserPage = observer(() => {
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const {user} = useContext(Context);
     const {id} = useParams();
     const toast = useRef(null);
@@ -55,7 +55,6 @@ const UserPage = observer(() => {
                 reviewNumber={pageData.reviewNumber}
                 userData={pageData.userData}
                 likesNumber={pageData.likesNumber}
-                t={t}
             />
             <PrimeReactProvider>
                 <UserPageReviews
@@ -64,7 +63,6 @@ const UserPage = observer(() => {
                     isAdmin={isAdmin}
                     userId={id}
                     toast={toast}
-                    t={t}
                 />
             </PrimeReactProvider>
         </Container>

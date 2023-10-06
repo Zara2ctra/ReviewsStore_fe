@@ -8,9 +8,11 @@ import ReviewItemTitle from "./ReviewItemTitle";
 import {fetchLikeStatus, fetchNumberLikes} from "../http/likeAPI";
 import {getReviewRating} from "../http/ratingAPI";
 import {CiImageOff} from "react-icons/ci";
+import {useTranslation} from "react-i18next";
 
-const ReviewItem = ({review, t, user, themeMode, themeColors}) => {
+const ReviewItem = ({review, user, themeMode, themeColors}) => {
     const navigate = useNavigate();
+    const {t} = useTranslation();
     const [reviewInfo, setReviewInfo] = useState({
         likeStatus: false,
         likesNumber: 0,
@@ -94,7 +96,6 @@ const ReviewItem = ({review, t, user, themeMode, themeColors}) => {
                         overflow: "hidden",
                     }}>
                         <ReviewItemTitle
-                            t={t}
                             review={review}
                             likeStatus={reviewInfo.likeStatus}
                             likesNumber={reviewInfo.likesNumber}

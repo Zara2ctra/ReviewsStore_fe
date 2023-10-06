@@ -4,8 +4,11 @@ import {FilterMatchMode} from "primereact/api";
 import {Button} from "primereact/button";
 import {IoTrashBinSharp} from "react-icons/io5";
 import {Container} from "react-bootstrap";
+import {useTranslation} from "react-i18next";
 
-const TableHeader = ({setFilters,isAdmin, isYour, confirmDeleteSelected, selectedReviews, t}) => {
+const TableHeader = ({setFilters,isAdmin, isYour, confirmDeleteSelected, selectedReviews}) => {
+    const {t} = useTranslation();
+
     return (
         <Container className="d-flex justify-content-between">
             <div>

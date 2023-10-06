@@ -2,8 +2,11 @@ import React from 'react';
 import {Card, Container} from "react-bootstrap";
 import {BiLike, BiUserCircle} from "react-icons/bi";
 import {format} from "date-fns";
+import {useTranslation} from "react-i18next";
 
-const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, t, isSmallScreen}) => {
+const ReviewItemTitle = ({themeColors, likesNumber, likeStatus, review, isSmallScreen}) => {
+    const {t} = useTranslation();
+
     const reviewCreatedDate = new Date(review.createdAt);
 
     return (

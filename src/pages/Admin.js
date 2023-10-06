@@ -158,7 +158,6 @@ const Admin = observer(() => {
                         isAdmin={true}
                         confirmDeleteSelected={confirmDeleteSelected}
                         selectedReviews={selectedReviews}
-                        t={t}
                     />}
                     value={data}
                     rowGroupMode="rowspan" groupRowsBy="user.email"
@@ -184,7 +183,6 @@ const Admin = observer(() => {
                     deleteReview={deleteReview}
                     hideDeleteReviewDialog={hideDeleteReviewDialog}
                     review={review}
-                    t={t}
                 />
 
                 <DeleteReviewsModal
@@ -192,7 +190,6 @@ const Admin = observer(() => {
                     deleteSelectedReviews={deleteSelectedReviews}
                     hideDeleteReviewsDialog={hideDeleteReviewsDialog}
                     review={review}
-                    t={t}
                 />
             </PrimeReactProvider>
         </Container>

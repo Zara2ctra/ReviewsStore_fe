@@ -2,8 +2,11 @@ import React from 'react';
 import {observer} from "mobx-react-lite";
 import {REVIEWS_STORE_ROUTE, TYPES_EN} from "../utils/consts";
 import {Button, Container} from "react-bootstrap";
+import {useTranslation} from "react-i18next";
 
-const Types = observer(({themeMode, user, t, handleNavigation}) => {
+const Types = observer(({themeMode, user, handleNavigation}) => {
+    const {t} = useTranslation();
+
     const clickType = (type) => {
         user.setSelectedType(type);
         handleNavigation(`${REVIEWS_STORE_ROUTE}/${type}`);

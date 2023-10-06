@@ -9,10 +9,10 @@ import {useTranslation} from "react-i18next";
 import {createOrGetArtWork} from "../http/artworkAPI";
 import {languageMappings} from "../i18n";
 import Alert404 from "../components/404";
-import CreateOrEditReviewInfo from "../components/CreateOrEditReviewInfo";
+import ManipulateReviewInfo from "../components/ManipulateReviewInfo";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const CreateOrEditReview = observer(() => {
+const ReviewManipulator = observer(() => {
     const {t, i18n} = useTranslation();
     const {user} = useContext(Context)
     const [formData, setFormData] = useState({
@@ -132,7 +132,7 @@ const CreateOrEditReview = observer(() => {
             {isEditMode && !formData.isYouReview ? (
                 <Alert404/>
             ) : (
-                <CreateOrEditReviewInfo
+                <ReviewManipulator
                     validated={validated}
                     handleSubmit={handleSubmit}
                     formData={formData}
@@ -140,7 +140,6 @@ const CreateOrEditReview = observer(() => {
                     nameError={nameError}
                     handleChangeFile={handleChangeFile}
                     isEditMode={isEditMode}
-                    t={t}
                     themeMode={themeMode}
                     setFormData={setFormData}
                 />
@@ -149,4 +148,4 @@ const CreateOrEditReview = observer(() => {
     );
 });
 
-export default CreateOrEditReview;
+export default ReviewManipulator;

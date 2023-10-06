@@ -1,8 +1,11 @@
 import React from 'react';
 import {LANG} from "../utils/consts";
 import {Form} from "react-bootstrap";
+import {useTranslation} from "react-i18next";
 
-const LanguageSelect = ({t, i18n, themeMode}) => {
+const LanguageSelect = ({themeMode}) => {
+    const {t, i18n} = useTranslation();
+
     const handleChangeType = async (e) => {
         const currentLang = e.target.value.toLowerCase().slice(0, 2)
         await i18n.changeLanguage(currentLang);

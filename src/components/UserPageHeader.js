@@ -1,8 +1,11 @@
 import React from 'react';
 import {Container} from "react-bootstrap";
 import {BiUserCircle} from "react-icons/bi";
+import {useTranslation} from "react-i18next";
 
-const UserPageHeader = ({themeMode, themeColors, userData, reviewNumber, likesNumber, t}) => {
+const UserPageHeader = ({themeMode, themeColors, userData, reviewNumber, likesNumber}) => {
+    const {t} = useTranslation();
+
     return (
         <Container
             className={`mt-5 d-flex justify-content-between gap-3`}
